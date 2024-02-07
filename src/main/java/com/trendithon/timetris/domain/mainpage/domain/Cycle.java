@@ -15,6 +15,7 @@ public class Cycle {
     @Enumerated(EnumType.STRING)
     private Week cycling;
     @OneToOne(fetch = FetchType.LAZY)
-    private Plan planId;
+    @JoinColumn(name = "planId")
+    private Plan plan;
 
 }

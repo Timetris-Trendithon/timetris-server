@@ -15,6 +15,7 @@ public class See {
     @Lob
     private String content;
     @ManyToOne(fetch = FetchType.LAZY)
-    private Date dateId;
+    @JoinColumn(name = "dateId")
+    private Date date;
 
 }

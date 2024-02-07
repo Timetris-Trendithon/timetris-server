@@ -16,8 +16,10 @@ public class UserDate {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @ManyToOne(fetch = FetchType.LAZY)
-    private User userId;
+    @JoinColumn(name = "userId")
+    private User user;
     @ManyToOne(fetch = FetchType.LAZY)
-    private Date dateId;
+    @JoinColumn(name = "dateId")
+    private Date date;
 
 }

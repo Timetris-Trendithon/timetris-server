@@ -18,8 +18,10 @@ public class Do {
     private LocalDateTime startTime;
     private LocalDateTime endTime;
     @ManyToOne(fetch = FetchType.LAZY)
-    private Category categoryId;
+    @JoinColumn(name = "categoryId")
+    private Category category;
     @ManyToOne(fetch = FetchType.LAZY)
-    private Date dateId;
+    @JoinColumn(name = "dateId")
+    private Date date;
 
 }

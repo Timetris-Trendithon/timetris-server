@@ -16,6 +16,7 @@ public class Category {
     private String name;
     private String colorCode;
     @ManyToOne(fetch = FetchType.LAZY)
-    private User userId;
+    @JoinColumn(name = "userId")
+    private User user;
 
 }

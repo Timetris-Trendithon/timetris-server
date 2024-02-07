@@ -19,8 +19,10 @@ public class Plan {
     private LocalDateTime endTime;
     private boolean status = false;
     @ManyToOne(fetch = FetchType.LAZY)
-    private Category categoryId;
+    @JoinColumn(name = "categoryId")
+    private Category category;
     @ManyToOne(fetch = FetchType.LAZY)
-    private Date dateId;
+    @JoinColumn(name = "dateId")
+    private Date date;
 
 }
