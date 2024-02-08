@@ -2,9 +2,9 @@ name: TimeTris CI/CD
 
 on:
   push:
-    branches: [ main ]
+    branches: [ develop ]
   pull_request:
-    branches: [ main ]
+    branches: [ develop ]
 
 env:
   AWS_REGION: ap-northeast-2
