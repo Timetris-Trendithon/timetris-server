@@ -9,7 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @Getter
@@ -19,6 +19,6 @@ public class Date {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private LocalDateTime date;
+    private LocalDate date;
 
 }

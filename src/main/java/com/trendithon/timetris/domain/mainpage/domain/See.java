@@ -1,5 +1,6 @@
 package com.trendithon.timetris.domain.mainpage.domain;
 
+import com.trendithon.timetris.domain.mainpage.dto.SeeCreateDTO;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -17,7 +18,16 @@ public class See {
     @Lob
     private String content;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "dateId")
-    private Date date;
+    @JoinColumn(name = "userDateId")
+    private UserDate userDate;
+
+    public void updateSee(String content){
+        this.content = content;
+    }
+
+    public See(SeeCreateDTO seeCreateDTO, UserDate userDate){
+        this.content = seeCreateDTO.getContent();
+        this.userDate = userDate;
+    }
 
 }
