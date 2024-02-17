@@ -33,15 +33,4 @@ public class MainPageDTO {
 
     }
 
-    public static MainPageDTO from(List<Plan> planList, List<Do> doList){
-        List<PlanViewDTO> planViewDTOS = planList.stream()
-                .map(PlanViewDTO::of)
-                .toList();
-        List<DoViewDTO> doViewDTOS = doList.stream()
-                .map(DoViewDTO::of)
-                .toList();
-
-    }
-
-
 }
