@@ -23,7 +23,6 @@ import java.util.Optional;
 @Slf4j
 @Configuration
 @Getter
-@PropertySource("classpath:application-jwt.yml")
 public class TokenProvider {
 
 
