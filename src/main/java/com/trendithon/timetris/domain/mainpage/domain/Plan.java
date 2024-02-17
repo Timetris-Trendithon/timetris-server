@@ -2,6 +2,7 @@ package com.trendithon.timetris.domain.mainpage.domain;
 
 import com.trendithon.timetris.domain.mainpage.dto.PlanCreateDTO;
 import com.trendithon.timetris.domain.mainpage.dto.PlanViewDTO;
+import com.trendithon.timetris.domain.mainpage.repository.PlanRepository;
 import jakarta.persistence.*;
 import lombok.*;
 
