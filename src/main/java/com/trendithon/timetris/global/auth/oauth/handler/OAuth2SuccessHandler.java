@@ -21,7 +21,6 @@ import java.io.IOException;
 @RequiredArgsConstructor
 @Component
 @Slf4j
-@PropertySource("classpath:application-jwt.yml")
 public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     private final TokenProvider tokenProvider;
