@@ -25,7 +25,9 @@ public class MainPageDTO {
         List<DoViewDTO> doViewDTOS = doList.stream()
                 .map(DoViewDTO::of)
                 .toList();
-        List<SeeViewDTO> seeViewDTO1 = sesL;
+        List<SeeViewDTO> seeViewDTO1 = seeList.stream()
+                .map(SeeViewDTO::of)
+                .toList();
 
         return new MainPageDTO(planViewDTOS, doViewDTOS, seeViewDTO1);
 
