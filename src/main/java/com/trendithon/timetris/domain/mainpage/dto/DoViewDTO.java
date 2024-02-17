@@ -19,14 +19,14 @@ public class DoViewDTO {
     private String title;
     private LocalTime startTime;
     private LocalTime endTime;
-    private Category category;
+    private CategoryViewDTO category;
 
     public static DoViewDTO of(Do does){
         return DoViewDTO.builder()
                 .title(does.getTitle())
                 .startTime(does.getStartTime())
                 .endTime(does.getEndTime())
-                .category(does.getCategory())
+                .category(CategoryViewDTO.of(does.getCategory()))
                 .build();
     }
 
