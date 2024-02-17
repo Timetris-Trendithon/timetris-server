@@ -48,7 +48,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
         String accessToken = tokenProvider.createAccessToken(foundAccount);
         response.addHeader(tokenProvider.getAccessHeader(), "Bearer " + accessToken);
-        response.sendRedirect("/member/detail");
+        response.sendRedirect("/main");
 
         tokenProvider.sendAccessAndRefreshToken(response, accessToken, null);
     }

@@ -34,13 +34,13 @@ public class SecurityConfig {
 
         http.authorizeRequests()
                 .requestMatchers("/","/css/**","/images/**","/js/**","/favicon.ico","/h2-console/**", "/index.html").permitAll()
-                .requestMatchers("/api/v1/google/*").permitAll() // 모든 유저 접근 가능 (인증 필요 X)
+                .requestMatchers("/login").permitAll() // 모든 유저 접근 가능 (인증 필요 X)
                 .requestMatchers(
                         // Swagger 허용 URL
                         "/v2/api-docs", "/v3/api-docs", "/v3/api-docs/**", "/swagger-resources",
                         "/swagger-resources/**", "/configuration/ui", "/configuration/security", "/swagger-ui/**",
                         "/webjars/**", "/swagger-ui.html").permitAll()
-                .requestMatchers("/main").hasRole("USER") // "/main/authenticated"에 대한 접근은 "USER" 역할이 있어야 함
+                //.requestMatchers("/main").hasRole("USER") // "/main/authenticated"에 대한 접근은 "USER" 역할이 있어야 함
                 .requestMatchers("/api/**").authenticated() // 인증 필요
 
                 .anyRequest().permitAll();
