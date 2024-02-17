@@ -14,7 +14,13 @@ public enum ErrorStatus {
     INVALID_TYPE_ERROR(HttpStatus.BAD_REQUEST, "COMMON400", "올바르지 않은 타입입니다."),
     ILLEGAL_ARGUMENT_ERROR(HttpStatus.BAD_REQUEST, "COMMON400", "필수 파라미터가 없습니다"),
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "COMMON500", "서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요."),
-    INVALID_HTTP_METHOD(HttpStatus.METHOD_NOT_ALLOWED, "COMMON400", "잘못된 Http Method 요청입니다.");
+    INVALID_HTTP_METHOD(HttpStatus.METHOD_NOT_ALLOWED, "COMMON400", "잘못된 Http Method 요청입니다."),
+    NO_PERMISSION_ERROR(HttpStatus.BAD_REQUEST, "COMMOM400", "해당 유저에게 수정/삭제 권한이 없습니다."),
+    USER_NOT_FOUND_ERROR(HttpStatus.NOT_FOUND, "COMMOM400", "해당 유저를 찾을 수 없습니다."),
+    CATEGORY_NOT_FOUND_ERROR(HttpStatus.NOT_FOUND, "COMMOM400", "해당 카테고리를 찾을 수 없습니다."),
+    PLAN_NOT_FOUND_ERROR(HttpStatus.NOT_FOUND, "COMMOM400", "해당 plan을 찾을 수 없습니다."),
+    DO_NOT_FOUND_ERROR(HttpStatus.NOT_FOUND, "COMMOM400", "해당 do를 찾을 수 없습니다."),
+    SEE_NOT_FOUND_ERROR(HttpStatus.NOT_FOUND, "COMMOM400", "해당 see를 찾을 수 없습니다."),;
 
 
     private final HttpStatus httpStatus;
