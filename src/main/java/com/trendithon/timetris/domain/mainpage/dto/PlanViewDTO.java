@@ -19,7 +19,7 @@ public class PlanViewDTO {
     private LocalTime startTime;
     private LocalTime endTime;
     private boolean status;
-    private Category category;
+    private CategoryViewDTO category;
 
     public static PlanViewDTO of(Plan plan){
         return PlanViewDTO.builder()
@@ -27,7 +27,7 @@ public class PlanViewDTO {
                 .startTime(plan.getStartTime())
                 .endTime(plan.getEndTime())
                 .status(plan.isStatus())
-                .category(plan.getCategory())
+                .category(CategoryViewDTO.of(plan.getCategory()))
                 .build();
     }
 
