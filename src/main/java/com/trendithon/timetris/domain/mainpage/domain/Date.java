@@ -1,5 +1,6 @@
 package com.trendithon.timetris.domain.mainpage.domain;
 
+import com.trendithon.timetris.domain.mainpage.dto.DateCreateDTO;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -20,5 +21,9 @@ public class Date {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private LocalDate date;
+
+    public Date(DateCreateDTO dateCreateDTO){
+        this.date = dateCreateDTO.getLocalDate();
+    }
 
 }

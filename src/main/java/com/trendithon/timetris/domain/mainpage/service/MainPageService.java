@@ -9,4 +9,5 @@ import java.time.LocalDate;
 @Service
 public interface MainPageService {
     MainPageDTO getMainPage(long userId);
+    void createUserDate();
 }
