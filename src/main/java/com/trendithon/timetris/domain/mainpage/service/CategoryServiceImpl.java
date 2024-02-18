@@ -23,11 +23,12 @@ public class CategoryServiceImpl implements CategoryService{
     private final UserRepository userRepository;
 
 //    @Override
-    public List<Category> readCategoryAll(long userId) {
+    public List<CategoryViewDTO> readCategoryAll(long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorStatus.USER_NOT_FOUND_ERROR));
         List<Category> result = categoryRepository.findAllByUser(user);
-        return result;
+        List<CategoryViewDTO> categoryViewDTOList = CategoryViewDTO.from(result);
+        return categoryViewDTOList;
     }
 
     @Override

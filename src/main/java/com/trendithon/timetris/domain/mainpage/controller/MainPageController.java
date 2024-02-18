@@ -25,23 +25,23 @@ public class MainPageController {
     private final MainPageService mainPageService;
     private final TokenProvider tokenProvider;
 
-    @GetMapping("/{userId}")
-    public ApiResponse<MainPageDTO> getMainPage(Authentication authentication,
-                                                @PathVariable long userId) {
+    @GetMapping("")
+    public ApiResponse<MainPageDTO> getMainPage(HttpServletRequest request) {
+        String accessToken = tokenProvider.extractAccessToken(request).orElse(null);
+
+        Long userId = null;
+
+        if (accessToken != null) {
+            userId = tokenProvider.extractId(accessToken).orElse(null);
+        } else {
+            return ApiResponse.failure(ErrorStatus.NOT_LOGIN_ERROR);
+
+        }
+        if(userId == null) {
+            throw new CustomException(ErrorStatus.USER_NOT_FOUND_ERROR);
+        }
         MainPageDTO mainPageDTO = mainPageService.getMainPage(userId);
         return ApiResponse.success(SuccessStatus.OK, mainPageDTO);
     }
 
-
-    @GetMapping
-    public ApiResponse<String> MainForTest(HttpServletRequest request) {
-        String userName = (String) request.getSession().getAttribute("name");
-
-        if (userName == null) {
-            return ApiResponse.of("LOGIN", "로그인 하세요");
-        } else {
-            return ApiResponse.success(SuccessStatus.OK, userName);
-        }
-
-    }
 }
