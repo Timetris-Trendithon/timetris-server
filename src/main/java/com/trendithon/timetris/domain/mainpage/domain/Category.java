@@ -1,6 +1,6 @@
 package com.trendithon.timetris.domain.mainpage.domain;
 
-import com.trendithon.timetris.domain.login.domain.User;
+import com.trendithon.timetris.domain.member.domain.User;
 import com.trendithon.timetris.domain.mainpage.dto.CategoryCreateDTO;
 import jakarta.persistence.*;
 import lombok.AccessLevel;

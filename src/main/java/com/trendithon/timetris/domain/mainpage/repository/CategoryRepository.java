@@ -1,6 +1,6 @@
 package com.trendithon.timetris.domain.mainpage.repository;
 
-import com.trendithon.timetris.domain.login.domain.User;
+import com.trendithon.timetris.domain.member.domain.User;
 import com.trendithon.timetris.domain.mainpage.domain.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
 

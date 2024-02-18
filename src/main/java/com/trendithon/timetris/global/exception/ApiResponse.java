@@ -1,6 +1,7 @@
 package com.trendithon.timetris.global.exception;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.trendithon.timetris.global.exception.enums.ErrorStatus;
 import com.trendithon.timetris.global.exception.enums.SuccessStatus;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -22,6 +23,10 @@ public class ApiResponse<T> {
     // 응답코드만
     public static <T> ApiResponse<T> success(SuccessStatus successStatus) {
         return new ApiResponse<>(successStatus.getHttpStatusCode(), successStatus.getMessage());
+    }
+
+    public static <T> ApiResponse<T> failure(ErrorStatus errorStatus) {
+        return new ApiResponse<>(errorStatus.getHttpStatusCode(), errorStatus.getMessage());
     }
 
     // 응답코드 + 리턴 데이터

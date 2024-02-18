@@ -1,7 +1,7 @@
 package com.trendithon.timetris.global.auth.oauth.service;
 
-import com.trendithon.timetris.domain.login.domain.User;
-import com.trendithon.timetris.domain.login.repository.UserRepository;
+import com.trendithon.timetris.domain.member.domain.User;
+import com.trendithon.timetris.domain.member.repository.UserRepository;
 import com.trendithon.timetris.global.auth.oauth.dto.OAuthAttributes;
 import com.trendithon.timetris.global.auth.oauth.dto.*;
 import jakarta.servlet.http.HttpSession;

@@ -1,7 +1,7 @@
 package com.trendithon.timetris.global.auth.oauth.dto;
 
-import com.trendithon.timetris.domain.login.domain.Role;
-import com.trendithon.timetris.domain.login.domain.User;
+import com.trendithon.timetris.domain.member.domain.Role;
+import com.trendithon.timetris.domain.member.domain.User;
 import lombok.Builder;
 import lombok.Getter;
 

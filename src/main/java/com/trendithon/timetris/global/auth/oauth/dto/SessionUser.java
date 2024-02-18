@@ -1,6 +1,6 @@
 package com.trendithon.timetris.global.auth.oauth.dto;
 
-import com.trendithon.timetris.domain.login.domain.User;
+import com.trendithon.timetris.domain.member.domain.User;
 import lombok.Getter;
 
 import java.io.Serializable;
