@@ -7,6 +7,8 @@ import com.trendithon.timetris.domain.mainpage.dto.DateCreateDTO;
 import com.trendithon.timetris.domain.mainpage.dto.MainPageDTO;
 import com.trendithon.timetris.domain.mainpage.dto.UserDateCreateDTO;
 import com.trendithon.timetris.domain.mainpage.repository.*;
+import com.trendithon.timetris.global.exception.CustomException;
+import com.trendithon.timetris.global.exception.enums.ErrorStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -30,6 +32,9 @@ public class MainPageServiceImpl implements MainPageService{
     public MainPageDTO getMainPage(long userId) {
         LocalDate localDate = LocalDate.now();
         Date date = dateRepository.findByDate(localDate);
+        if (userRepository.findById(userId).isEmpty()){
+            throw new CustomException(ErrorStatus.USER_NOT_FOUND_ERROR);
+        }
         UserDate userDate = userDateRepository.findByUser_IdAndDate_Id(userId, date.getId());
 
         List<Plan> planList = planRepository.findAllByUserDate(userDate);
