@@ -11,7 +11,7 @@ import java.util.List;
 @Service
 public interface CategoryService {
 
-    List<Category> readCategoryAll(long userId);
+    List<CategoryViewDTO> readCategoryAll(long userId);
     Category createCategory(long userId, CategoryRequestDTO categoryRequestDTO);
     void updateCategory(long userId, long categoryId, CategoryViewDTO categoryViewDTO);
     void deleteCategory(long userId, long categoryId);

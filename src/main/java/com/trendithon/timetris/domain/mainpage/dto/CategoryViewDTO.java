@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Getter
 @Builder
 @AllArgsConstructor @NoArgsConstructor
@@ -19,6 +22,12 @@ public class CategoryViewDTO {
                 .name(category.getName())
                 .colorCode(category.getColorCode())
                 .build();
+    }
+
+    public static List<CategoryViewDTO> from(List<Category> categoryList){
+        return categoryList.stream()
+                .map(CategoryViewDTO::of)
+                .toList();
     }
 
 }
