@@ -1,7 +1,5 @@
 package com.trendithon.timetris.domain.mainpage.service;
 
-import com.trendithon.timetris.domain.login.domain.User;
-import com.trendithon.timetris.domain.login.repository.UserRepository;
 import com.trendithon.timetris.domain.mainpage.domain.Category;
 import com.trendithon.timetris.domain.mainpage.domain.Date;
 import com.trendithon.timetris.domain.mainpage.domain.Plan;

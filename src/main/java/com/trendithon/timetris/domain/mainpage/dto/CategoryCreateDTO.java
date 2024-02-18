@@ -1,6 +1,6 @@
 package com.trendithon.timetris.domain.mainpage.dto;
 
-import com.trendithon.timetris.domain.login.domain.User;
+import com.trendithon.timetris.domain.member.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
