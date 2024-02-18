@@ -5,10 +5,12 @@ import com.trendithon.timetris.domain.mainpage.dto.SeeCreateDTO;
 import com.trendithon.timetris.domain.mainpage.dto.SeeRequestDTO;
 import com.trendithon.timetris.domain.mainpage.dto.SeeViewDTO;
 import com.trendithon.timetris.domain.mainpage.service.SeeService;
+import com.trendithon.timetris.global.auth.jwt.TokenProvider;
 import com.trendithon.timetris.global.exception.ApiResponse;
 import com.trendithon.timetris.global.exception.CustomException;
 import com.trendithon.timetris.global.exception.enums.ErrorStatus;
 import com.trendithon.timetris.global.exception.enums.SuccessStatus;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -19,12 +21,26 @@ import org.springframework.web.bind.annotation.*;
 public class SeeController {
 
     private final SeeService seeService;
+    private final TokenProvider tokenProvider;
 
     @PostMapping("")
-    public ApiResponse createSee(Authentication authentication,
+    public ApiResponse createSee(HttpServletRequest request,
                                  @RequestBody SeeRequestDTO seeRequestDTO)
     {
-        long userId = 1;
+        String accessToken = tokenProvider.extractAccessToken(request).orElse(null);
+
+        Long userId = null;
+
+        if (accessToken != null) {
+            userId = tokenProvider.extractId(accessToken).orElse(null);
+        } else {
+            return ApiResponse.failure(ErrorStatus.NOT_LOGIN_ERROR);
+
+        }
+        if(userId == null) {
+            throw new CustomException(ErrorStatus.USER_NOT_FOUND_ERROR);
+        }
+
         See see = seeService.createSee(userId, seeRequestDTO);
         if (see == null){
             throw new CustomException(ErrorStatus.SEE_NOT_FOUND_ERROR);
@@ -33,20 +49,46 @@ public class SeeController {
     }
 
     @PutMapping("/{seeId}")
-    public ApiResponse updateSee(Authentication authentication,
+    public ApiResponse updateSee(HttpServletRequest request,
                                  @PathVariable long seeId,
                                  @RequestBody SeeViewDTO seeViewDTO)
     {
-        long userId = 1;
+        String accessToken = tokenProvider.extractAccessToken(request).orElse(null);
+
+        Long userId = null;
+
+        if (accessToken != null) {
+            userId = tokenProvider.extractId(accessToken).orElse(null);
+        } else {
+            return ApiResponse.failure(ErrorStatus.NOT_LOGIN_ERROR);
+
+        }
+        if(userId == null) {
+            throw new CustomException(ErrorStatus.USER_NOT_FOUND_ERROR);
+        }
+
         seeService.updateSee(userId, seeId, seeViewDTO);
         return ApiResponse.success(SuccessStatus.OK);
     }
 
     @DeleteMapping("/{seeId}")
-    public ApiResponse deleteSee(Authentication authentication,
+    public ApiResponse deleteSee(HttpServletRequest request,
                                  @PathVariable long seeId)
     {
-        long userId = 1;
+        String accessToken = tokenProvider.extractAccessToken(request).orElse(null);
+
+        Long userId = null;
+
+        if (accessToken != null) {
+            userId = tokenProvider.extractId(accessToken).orElse(null);
+        } else {
+            return ApiResponse.failure(ErrorStatus.NOT_LOGIN_ERROR);
+
+        }
+        if(userId == null) {
+            throw new CustomException(ErrorStatus.USER_NOT_FOUND_ERROR);
+        }
+
         seeService.deleteSee(userId, seeId);
         return ApiResponse.success(SuccessStatus.OK);
     }
