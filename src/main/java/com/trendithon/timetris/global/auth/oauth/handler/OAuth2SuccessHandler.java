@@ -1,16 +1,14 @@
 package com.trendithon.timetris.global.auth.oauth.handler;
 
-import com.trendithon.timetris.domain.login.domain.User;
-import com.trendithon.timetris.domain.login.repository.UserRepository;
+import com.trendithon.timetris.domain.login.domain.Role;
 import com.trendithon.timetris.global.auth.jwt.TokenProvider;
+import com.trendithon.timetris.global.auth.oauth.dto.CustomOAuth2User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,32 +22,44 @@ import java.io.IOException;
 public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     private final TokenProvider tokenProvider;
-    private final UserRepository userRepository;
 
     @Override
     @Transactional
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
             throws IOException, ServletException {
-        OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
 
-        // 구글 인증시 아래 로직
-        String realName = oAuth2User.getAttribute("name");
-        String email = oAuth2User.getAttribute("email");
-        log.info("구글 인증 시 이름 추출 [{}] || 이메일 추출 [{}]", realName, email);
+        try {
+            CustomOAuth2User oAuth2User = (CustomOAuth2User) authentication.getPrincipal();
 
+            String userName = oAuth2User.getAttribute("name");
 
-        User user = userRepository.findByEmail(email).orElse(null);
-        String foundAccount = user.getEmail();
-        user.authorizeUser();
-        log.info("소셜 로그인 인증한 계정명 [{}]", foundAccount);
+            if (oAuth2User.getRole() == Role.GUEST) {
+                String accessToken = tokenProvider.createAccessToken(oAuth2User.getEmail());
+                response.addHeader(tokenProvider.getAccessHeader(), "Bearer " + accessToken);
+                tokenProvider.sendAccessAndRefreshToken(response, accessToken, null);
 
-        request.getSession().setAttribute("name", realName);
+            } else {
+                loginSuccess(response, oAuth2User);
+            }
 
+            request.getSession().setAttribute("name", userName);
+            response.sendRedirect("/main");
 
-        String accessToken = tokenProvider.createAccessToken(foundAccount);
-        response.addHeader(tokenProvider.getAccessHeader(), "Bearer " + accessToken);
-        response.sendRedirect("/main");
+        } catch (Exception e) {
+            throw e;
+        }
 
-        tokenProvider.sendAccessAndRefreshToken(response, accessToken, null);
+    }
+
+    private void loginSuccess(HttpServletResponse response, CustomOAuth2User oAuth2User) throws IOException {
+        String accessToken = tokenProvider.createAccessToken(oAuth2User.getEmail());
+        String refreshToken = tokenProvider.createRefreshToken();
+
+        response.setHeader(tokenProvider.getAccessHeader(), "Bearer " + accessToken);
+        response.addHeader(tokenProvider.getRefreshHeader(), "Bearer " + refreshToken);
+
+        tokenProvider.sendAccessAndRefreshToken(response, accessToken, refreshToken);
+        tokenProvider.updateRefreshToken(oAuth2User.getEmail(), refreshToken);
+
     }
 }

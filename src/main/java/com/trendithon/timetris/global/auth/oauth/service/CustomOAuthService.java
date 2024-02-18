@@ -12,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
-import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -57,16 +56,16 @@ public class CustomOAuthService extends DefaultOAuth2UserService {
         // 로그인 성공하면 세션에 회원 이름 저장
         httpSession.setAttribute("user", new SessionUser(user));
 
-        // 해당 계정이 갖고 있는 권한 그대로 주입
-        return new DefaultOAuth2User(
+
+        return new CustomOAuth2User(
                 Collections.singleton(new SimpleGrantedAuthority(user.getRole().getKey())), attributes,
-                userNameAttributeName
+                extractAttributes.getNameAttributeKey(), user.getEmail(), user.getRole()
         );
     }
 
     private User saveOrUpdate(OAuthAttributes attributes) {
         User user = userRepository.findByEmail(attributes.getEmail())
-                .map(entity -> entity.update(attributes.getName(), attributes.getPicture()))
+                .map(entity -> entity.update(attributes.getName(), attributes.getEmail(), attributes.getPicture()))
                 .orElse(attributes.toEntity());
 
         return userRepository.save(user);
