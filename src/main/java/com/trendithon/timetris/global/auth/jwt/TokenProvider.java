@@ -1,6 +1,6 @@
 package com.trendithon.timetris.global.auth.jwt;
 
-import com.trendithon.timetris.domain.login.repository.UserRepository;
+import com.trendithon.timetris.domain.member.repository.UserRepository;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 
 import org.springframework.stereotype.Component;
 import com.auth0.jwt.JWT;

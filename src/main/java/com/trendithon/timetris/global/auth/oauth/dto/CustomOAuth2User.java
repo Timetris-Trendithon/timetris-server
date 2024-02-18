@@ -1,6 +1,6 @@
 package com.trendithon.timetris.global.auth.oauth.dto;
 
-import com.trendithon.timetris.domain.login.domain.Role;
+import com.trendithon.timetris.domain.member.domain.Role;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;

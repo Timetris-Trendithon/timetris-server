@@ -1,4 +1,4 @@
-package com.trendithon.timetris.domain.login.domain;
+package com.trendithon.timetris.domain.member.domain;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

@@ -1,6 +1,6 @@
 package com.trendithon.timetris.global.auth.oauth.handler;
 
-import com.trendithon.timetris.domain.login.domain.Role;
+import com.trendithon.timetris.domain.member.domain.Role;
 import com.trendithon.timetris.global.auth.jwt.TokenProvider;
 import com.trendithon.timetris.global.auth.oauth.dto.CustomOAuth2User;
 import jakarta.servlet.ServletException;

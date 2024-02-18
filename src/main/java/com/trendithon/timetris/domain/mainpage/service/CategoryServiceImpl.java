@@ -1,8 +1,8 @@
 package com.trendithon.timetris.domain.mainpage.service;
 
 
-import com.trendithon.timetris.domain.login.domain.User;
-import com.trendithon.timetris.domain.login.repository.UserRepository;
+import com.trendithon.timetris.domain.member.domain.User;
+import com.trendithon.timetris.domain.member.repository.UserRepository;
 import com.trendithon.timetris.domain.mainpage.domain.Category;
 import com.trendithon.timetris.domain.mainpage.dto.CategoryCreateDTO;
 import com.trendithon.timetris.domain.mainpage.dto.CategoryRequestDTO;
