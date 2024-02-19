@@ -32,9 +32,6 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         try {
             CustomOAuth2User oAuth2User = (CustomOAuth2User) authentication.getPrincipal();
 
-//            String userName = oAuth2User.getAttribute("name");
-//            String imgUrl = oAuth2User.getAttribute("picture");
-
             String accessToken;
             if (oAuth2User.getRole() == Role.GUEST) {
                 accessToken = tokenProvider.createAccessToken(oAuth2User.getEmail());
@@ -46,10 +43,6 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
             }
 
             String redirectUrl = "http://localhost:3000?accessToken=" + accessToken;
-
-//            request.getSession().setAttribute("token", accessToken);
-//            request.getSession().setAttribute("name", userName);
-//            request.getSession().setAttribute("picture", imgUrl);
 
             response.sendRedirect(redirectUrl);
 
