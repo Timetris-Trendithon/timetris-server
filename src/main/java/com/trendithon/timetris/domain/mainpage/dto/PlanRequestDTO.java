@@ -11,10 +11,8 @@ import java.time.LocalTime;
 public class PlanRequestDTO {
 
     private String title;
-    private LocalTime startTime;
-    private LocalTime endTime;
-    private boolean status;
+    private String startTime;
+    private String endTime;
     private long categoryId;
-    private long userDateId;
 
 }

@@ -5,10 +5,13 @@ import com.trendithon.timetris.domain.mainpage.dto.PlanCreateDTO;
 import com.trendithon.timetris.domain.mainpage.dto.PlanRequestDTO;
 import com.trendithon.timetris.domain.mainpage.dto.PlanViewDTO;
 import com.trendithon.timetris.domain.mainpage.service.PlanService;
+import com.trendithon.timetris.domain.member.domain.User;
+import com.trendithon.timetris.global.auth.jwt.TokenProvider;
 import com.trendithon.timetris.global.exception.ApiResponse;
 import com.trendithon.timetris.global.exception.CustomException;
 import com.trendithon.timetris.global.exception.enums.ErrorStatus;
 import com.trendithon.timetris.global.exception.enums.SuccessStatus;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,12 +23,31 @@ import org.springframework.web.bind.annotation.*;
 public class PlanController {
 
     private final PlanService planService;
+    private final TokenProvider tokenProvider;
+
+    public long getUserId(HttpServletRequest request){
+        String accessToken = tokenProvider.extractAccessToken(request).orElse(null);
+
+        Long userId = null;
+
+        if (accessToken != null) {
+            userId = tokenProvider.extractId(accessToken).orElse(null);
+        } else {
+            throw new CustomException(ErrorStatus.NOT_LOGIN_ERROR);
+
+        }
+        if(userId == null) {
+            throw new CustomException(ErrorStatus.USER_NOT_FOUND_ERROR);
+        }
+        return userId;
+    }
 
     @PostMapping("")
-    public ApiResponse createPlan(Authentication authentication,
+    public ApiResponse createPlan(HttpServletRequest request,
                                         @RequestBody PlanRequestDTO planRequestDTO)
     {
-        long userId = 1;
+        long userId = getUserId(request);
+
         Plan plan = planService.createPlan(userId, planRequestDTO);
         if (plan == null){
             throw new CustomException(ErrorStatus.INVALID_FORMAT_ERROR);
@@ -34,29 +56,44 @@ public class PlanController {
     }
 
     @PutMapping("/{planId}")
-    public ApiResponse updatePlan(Authentication authentication,
+    public ApiResponse updatePlan(HttpServletRequest request,
                                   @PathVariable long planId,
-                                  @RequestBody PlanViewDTO planViewDTO)
+                                  @RequestBody PlanRequestDTO planRequestDTO)
     {
-        long userId = 1;
-        planService.updatePlan(userId, planId, planViewDTO);
+        long userId = getUserId(request);
+
+        planService.updatePlan(userId, planId, planRequestDTO);
         return ApiResponse.success(SuccessStatus.OK);
     }
 
     @DeleteMapping("/{planId}")
-    public ApiResponse deletePlan(Authentication authentication,
+    public ApiResponse deletePlan(HttpServletRequest request,
                                   @PathVariable long planId)
     {
-        long userId = 1;
+        String accessToken = tokenProvider.extractAccessToken(request).orElse(null);
+
+        Long userId = null;
+
+        if (accessToken != null) {
+            userId = tokenProvider.extractId(accessToken).orElse(null);
+        } else {
+            return ApiResponse.failure(ErrorStatus.NOT_LOGIN_ERROR);
+
+        }
+        if(userId == null) {
+            throw new CustomException(ErrorStatus.USER_NOT_FOUND_ERROR);
+        }
+
         planService.deletePlan(userId, planId);
         return ApiResponse.success(SuccessStatus.OK);
     }
 
     @PutMapping("/{planId}/check")
-    public ApiResponse donePlan(Authentication authentication,
+    public ApiResponse donePlan(HttpServletRequest request,
                                 @PathVariable long planId)
     {
-        long userId = 1;
+        long userId = getUserId(request);
+
         planService.donePlan(userId, planId);
         return ApiResponse.success(SuccessStatus.OK);
     }

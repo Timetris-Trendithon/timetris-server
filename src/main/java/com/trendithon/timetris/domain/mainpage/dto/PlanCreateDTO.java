@@ -17,6 +17,5 @@ public class PlanCreateDTO {
     private LocalTime endTime;
     private boolean status;
     private Category category;
-    private UserDate userDate;
 
 }

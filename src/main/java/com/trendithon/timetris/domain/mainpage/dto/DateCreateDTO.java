@@ -1,14 +1,15 @@
 package com.trendithon.timetris.domain.mainpage.dto;
 
-import com.trendithon.timetris.domain.mainpage.domain.UserDate;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @Getter
 @AllArgsConstructor @NoArgsConstructor
-public class SeeCreateDTO {
+public class DateCreateDTO {
 
-    private String content;
+    private LocalDate localDate;
 
 }

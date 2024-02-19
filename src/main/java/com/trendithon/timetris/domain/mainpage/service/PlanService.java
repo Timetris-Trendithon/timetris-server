@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 public interface PlanService {
 
     Plan createPlan(long userId, PlanRequestDTO planRequestDTO);
-    void updatePlan(long userId, long planId, PlanViewDTO planViewDTO);
+    void updatePlan(long userId, long planId, PlanRequestDTO planRequestDTO);
     void deletePlan(long userId, long planId);
     void donePlan(long userId, long planId);
 

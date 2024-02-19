@@ -14,10 +14,12 @@ import java.util.Optional;
 @AllArgsConstructor @NoArgsConstructor
 public class SeeViewDTO {
 
+    private long id;
     private String content;
 
     public static SeeViewDTO of(See see){
         return SeeViewDTO.builder()
+                .id(see.getId())
                 .content(see.getContent())
                 .build();
     }

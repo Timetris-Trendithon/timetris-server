@@ -1,6 +1,7 @@
 package com.trendithon.timetris.domain.mainpage.domain;
 
 import com.trendithon.timetris.domain.member.domain.User;
+import com.trendithon.timetris.domain.mainpage.dto.UserDateCreateDTO;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -22,5 +23,10 @@ public class UserDate {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "dateId")
     private Date date;
+
+    public UserDate(UserDateCreateDTO userDateCreateDTO){
+        this.user = userDateCreateDTO.getUser();
+        this.date = userDateCreateDTO.getDate();
+    }
 
 }
