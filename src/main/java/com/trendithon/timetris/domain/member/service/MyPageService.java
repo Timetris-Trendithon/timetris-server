@@ -2,6 +2,7 @@ package com.trendithon.timetris.domain.member.service;
 
 import com.trendithon.timetris.domain.member.domain.User;
 import com.trendithon.timetris.domain.member.dto.MyPageResponse;
+import com.trendithon.timetris.domain.member.dto.UpdateNameRequest;
 import com.trendithon.timetris.domain.member.repository.UserRepository;
 import com.trendithon.timetris.global.exception.CustomException;
 import com.trendithon.timetris.global.exception.enums.ErrorStatus;
@@ -22,9 +23,23 @@ public class MyPageService {
         Optional<User> user = userRepository.findById(userId);
 
         MyPageResponse.getMyPageDTO toMyPageDTO = MyPageResponse.getMyPageDTO.builder()
-                .name(user.get().getName())
+                .name(user.get().getNickname())
                 .email(user.get().getEmail())
                 .build();
         return toMyPageDTO;
     }
+
+    @Transactional
+    public MyPageResponse.getMyPageDTO updateName(Long userId, UpdateNameRequest nameRequest) {
+        Optional<User> user = userRepository.findById(userId);
+        String nickname = nameRequest.getNickname();
+        user.get().changeNickname(nickname);
+
+        return MyPageResponse.getMyPageDTO.builder()
+                .name(user.get().getNickname())
+                .email(user.get().getEmail())
+                .build();
+
+    }
+
 }

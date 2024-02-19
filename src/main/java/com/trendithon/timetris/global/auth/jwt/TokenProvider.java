@@ -2,6 +2,8 @@ package com.trendithon.timetris.global.auth.jwt;
 
 import com.trendithon.timetris.domain.member.repository.UserRepository;
 
+import com.trendithon.timetris.global.exception.CustomException;
+import com.trendithon.timetris.global.exception.enums.ErrorStatus;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.Getter;
@@ -144,5 +146,22 @@ public class TokenProvider {
             log.error("액세스 토큰이 유효하지 않습니다.");
             return Optional.empty();
         }
+    }
+
+    public Long getUserId(HttpServletRequest request){
+        String accessToken = extractAccessToken(request).orElse(null);
+
+        Long userId = null;
+
+        if (accessToken != null) {
+            userId = extractId(accessToken).orElse(null);
+        } else {
+            throw new CustomException(ErrorStatus.NOT_LOGIN_ERROR);
+
+        }
+        if(userId == null) {
+            throw new CustomException(ErrorStatus.USER_NOT_FOUND_ERROR);
+        }
+        return userId;
     }
 }

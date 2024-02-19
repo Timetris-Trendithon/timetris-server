@@ -18,6 +18,8 @@ public class User {
     @NotNull
     private String name;
 
+    private String nickname;
+
     @NotNull
     private String email;
 
@@ -29,6 +31,9 @@ public class User {
 
     private String refreshToken;
 
+    public void changeNickname(String nickname) {
+        this.nickname = nickname;
+    }
 
     // 로그인 할 때마다 해당 필드 새롭게 업데이트
     public User update(String name, String email, String profile) {
