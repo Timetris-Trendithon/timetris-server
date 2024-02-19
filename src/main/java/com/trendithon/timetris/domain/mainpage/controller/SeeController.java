@@ -23,10 +23,7 @@ public class SeeController {
     private final SeeService seeService;
     private final TokenProvider tokenProvider;
 
-    @PostMapping("")
-    public ApiResponse createSee(HttpServletRequest request,
-                                 @RequestBody SeeRequestDTO seeRequestDTO)
-    {
+    public long getUserId(HttpServletRequest request){
         String accessToken = tokenProvider.extractAccessToken(request).orElse(null);
 
         Long userId = null;
@@ -34,12 +31,20 @@ public class SeeController {
         if (accessToken != null) {
             userId = tokenProvider.extractId(accessToken).orElse(null);
         } else {
-            return ApiResponse.failure(ErrorStatus.NOT_LOGIN_ERROR);
+            throw new CustomException(ErrorStatus.NOT_LOGIN_ERROR);
 
         }
         if(userId == null) {
             throw new CustomException(ErrorStatus.USER_NOT_FOUND_ERROR);
         }
+        return userId;
+    }
+
+    @PostMapping("")
+    public ApiResponse createSee(HttpServletRequest request,
+                                 @RequestBody SeeRequestDTO seeRequestDTO)
+    {
+        long userId = getUserId(request);
 
         See see = seeService.createSee(userId, seeRequestDTO);
         if (see == null){
@@ -53,19 +58,7 @@ public class SeeController {
                                  @PathVariable long seeId,
                                  @RequestBody SeeRequestDTO seeRequestDTO)
     {
-        String accessToken = tokenProvider.extractAccessToken(request).orElse(null);
-
-        Long userId = null;
-
-        if (accessToken != null) {
-            userId = tokenProvider.extractId(accessToken).orElse(null);
-        } else {
-            return ApiResponse.failure(ErrorStatus.NOT_LOGIN_ERROR);
-
-        }
-        if(userId == null) {
-            throw new CustomException(ErrorStatus.USER_NOT_FOUND_ERROR);
-        }
+        long userId = getUserId(request);
 
         seeService.updateSee(userId, seeId, seeRequestDTO);
         return ApiResponse.success(SuccessStatus.OK);
@@ -75,19 +68,7 @@ public class SeeController {
     public ApiResponse deleteSee(HttpServletRequest request,
                                  @PathVariable long seeId)
     {
-        String accessToken = tokenProvider.extractAccessToken(request).orElse(null);
-
-        Long userId = null;
-
-        if (accessToken != null) {
-            userId = tokenProvider.extractId(accessToken).orElse(null);
-        } else {
-            return ApiResponse.failure(ErrorStatus.NOT_LOGIN_ERROR);
-
-        }
-        if(userId == null) {
-            throw new CustomException(ErrorStatus.USER_NOT_FOUND_ERROR);
-        }
+        long userId = getUserId(request);
 
         seeService.deleteSee(userId, seeId);
         return ApiResponse.success(SuccessStatus.OK);
