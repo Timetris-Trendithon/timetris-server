@@ -13,7 +13,7 @@ public interface CategoryService {
 
     List<CategoryViewDTO> readCategoryAll(long userId);
     Category createCategory(long userId, CategoryRequestDTO categoryRequestDTO);
-    void updateCategory(long userId, long categoryId, CategoryViewDTO categoryViewDTO);
+    void updateCategory(long userId, long categoryId, CategoryRequestDTO categoryRequestDTO);
     void deleteCategory(long userId, long categoryId);
 
 }

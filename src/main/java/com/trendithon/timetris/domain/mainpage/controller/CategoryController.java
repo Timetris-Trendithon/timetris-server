@@ -72,9 +72,9 @@ public class CategoryController {
     }
 
     @PutMapping("/{categoryId}")
-    public ApiResponse<CategoryViewDTO> updateCategory(HttpServletRequest request,
+    public ApiResponse<CategoryRequestDTO> updateCategory(HttpServletRequest request,
                                       @PathVariable long categoryId,
-                                      @RequestBody CategoryViewDTO categoryViewDTO)
+                                      @RequestBody CategoryRequestDTO categoryRequestDTO)
     {
         String accessToken = tokenProvider.extractAccessToken(request).orElse(null);
 
@@ -90,8 +90,8 @@ public class CategoryController {
             throw new CustomException(ErrorStatus.USER_NOT_FOUND_ERROR);
         }
 
-        categoryService.updateCategory(userId, categoryId, categoryViewDTO);
-        return ApiResponse.success(SuccessStatus.OK, categoryViewDTO);
+        categoryService.updateCategory(userId, categoryId, categoryRequestDTO);
+        return ApiResponse.success(SuccessStatus.OK, categoryRequestDTO);
     }
 
     @DeleteMapping("/{categoryId}")
