@@ -45,6 +45,7 @@ public class SeeServiceImpl implements SeeService{
             throw new CustomException(ErrorStatus.NO_PERMISSION_ERROR);
         }
         see.updateSee(seeRequestDTO.getContent());
+        seeRepository.save(see);
     }
 
     @Override

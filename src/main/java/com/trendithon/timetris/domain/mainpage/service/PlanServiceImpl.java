@@ -50,6 +50,7 @@ public class PlanServiceImpl implements PlanService {
             throw new CustomException(ErrorStatus.NO_PERMISSION_ERROR);
         }
         plan.updatePlan(planRequestDTO.getTitle(), planRequestDTO.getStartTime(), planRequestDTO.getEndTime(), category);
+        planRepository.save(plan);
     }
 
     @Override
