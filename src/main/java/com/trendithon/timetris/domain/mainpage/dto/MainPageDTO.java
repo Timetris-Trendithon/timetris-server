@@ -17,9 +17,8 @@ public class MainPageDTO {
     List<DoViewDTO> doViewDTOList;
     List<SeeViewDTO> seeViewDTO;
     String userName;
-    String accessToken;
 
-    public static MainPageDTO from(String accessToken, String username, List<Plan> planList, List<Do> doList, List<See> seeList){
+    public static MainPageDTO from(String userName, List<Plan> planList, List<Do> doList, List<See> seeList){
         List<PlanViewDTO> planViewDTOS = planList.stream()
                 .map(PlanViewDTO::of)
                 .toList();
@@ -30,7 +29,7 @@ public class MainPageDTO {
                 .map(SeeViewDTO::of)
                 .toList();
 
-        return new MainPageDTO(planViewDTOS, doViewDTOS, seeViewDTO1, username, accessToken);
+        return new MainPageDTO(planViewDTOS, doViewDTOS, seeViewDTO1, userName);
 
     }
 

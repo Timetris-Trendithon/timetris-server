@@ -1,6 +1,7 @@
 package com.trendithon.timetris.domain.mainpage.service;
 
 import com.trendithon.timetris.domain.member.domain.User;
+import com.trendithon.timetris.domain.member.dto.MyPageResponse;
 import com.trendithon.timetris.domain.member.repository.UserRepository;
 import com.trendithon.timetris.domain.mainpage.domain.*;
 import com.trendithon.timetris.domain.mainpage.dto.DateCreateDTO;
@@ -9,7 +10,6 @@ import com.trendithon.timetris.domain.mainpage.dto.UserDateCreateDTO;
 import com.trendithon.timetris.domain.mainpage.repository.*;
 import com.trendithon.timetris.global.exception.CustomException;
 import com.trendithon.timetris.global.exception.enums.ErrorStatus;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -30,12 +30,9 @@ public class MainPageServiceImpl implements MainPageService{
     private final UserRepository userRepository;
 
     @Override
-    public MainPageDTO getMainPage(long userId, HttpServletRequest request) {
+    public MainPageDTO getMainPage(long userId) {
         LocalDate localDate = LocalDate.now();
         Date date = dateRepository.findByDate(localDate);
-
-        String userName = (String) request.getSession().getAttribute("name");
-        String accessToken = (String) request.getSession().getAttribute("token");
 
         if (userRepository.findById(userId).isEmpty()){
             throw new CustomException(ErrorStatus.USER_NOT_FOUND_ERROR);
@@ -45,13 +42,17 @@ public class MainPageServiceImpl implements MainPageService{
         List<Plan> planList = planRepository.findAllByUserDate(userDate);
         List<Do> doList = doRepository.findAllByUserDate(userDate);
         List<See> see = seeRepository.findByUserDate(userDate);
+        String name = userRepository.findById(userId).get().getNickname();
 
-        return MainPageDTO.from(accessToken, userName, planList, doList, see);
+        return MainPageDTO.from(name, planList, doList, see);
     }
     @Override
-    public Long getUserId(String userName, String imgUrl) {
-        Optional<User> user = userRepository.findByNameAndProfile(userName, imgUrl);
-        return user.get().getId();
+    public MyPageResponse.getMyPageDTO getUserInfo(Long userId) {
+        Optional<User> user = userRepository.findById(userId);
+        return MyPageResponse.getMyPageDTO.builder()
+                .name(user.get().getName())
+                .email(user.get().getEmail())
+                .build();
     }
 
     @Override

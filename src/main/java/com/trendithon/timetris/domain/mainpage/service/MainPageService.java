@@ -1,14 +1,16 @@
 package com.trendithon.timetris.domain.mainpage.service;
 
 import com.trendithon.timetris.domain.mainpage.dto.MainPageDTO;
-import jakarta.servlet.http.HttpServletRequest;
+import com.trendithon.timetris.domain.member.dto.MyPageResponse;
 import org.springframework.stereotype.Service;
+
 
 
 @Service
 public interface MainPageService {
-    MainPageDTO getMainPage(long userId, HttpServletRequest request);
+    MainPageDTO getMainPage(long userId);
 
-    Long getUserId(String username, String imgUrl);
+    MyPageResponse.getMyPageDTO getUserInfo(Long userId);
+
     void createUserDate();
 }
