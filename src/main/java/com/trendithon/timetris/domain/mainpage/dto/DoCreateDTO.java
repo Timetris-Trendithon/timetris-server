@@ -16,6 +16,5 @@ public class DoCreateDTO {
     private LocalTime startTime;
     private LocalTime endTime;
     private Category category;
-    private UserDate userDate;
 
 }

@@ -9,6 +9,6 @@ import org.springframework.stereotype.Service;
 @Service
 public interface DoService {
     Do createDo(long userId, DoRequestDTO doRequestDTO);
-    void updateDo(long userId, long doId, DoViewDTO doViewDTO);
+    void updateDo(long userId, long doId, DoRequestDTO doRequestDTO);
     void deleteDo(long userId, long doId);
 }

@@ -10,6 +10,5 @@ import lombok.NoArgsConstructor;
 public class SeeCreateDTO {
 
     private String content;
-    private UserDate userDate;
 
 }

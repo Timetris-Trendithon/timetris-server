@@ -15,6 +15,5 @@ public class PlanRequestDTO {
     private LocalTime endTime;
     private boolean status;
     private long categoryId;
-    private long userDateId;
 
 }

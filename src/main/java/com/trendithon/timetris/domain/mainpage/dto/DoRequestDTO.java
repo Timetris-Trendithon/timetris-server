@@ -14,6 +14,5 @@ public class DoRequestDTO {
     private LocalTime startTime;
     private LocalTime endTime;
     private long categoryId;
-    private long userDateId;
 
 }

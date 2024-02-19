@@ -51,7 +51,7 @@ public class SeeController {
     @PutMapping("/{seeId}")
     public ApiResponse updateSee(HttpServletRequest request,
                                  @PathVariable long seeId,
-                                 @RequestBody SeeViewDTO seeViewDTO)
+                                 @RequestBody SeeRequestDTO seeRequestDTO)
     {
         String accessToken = tokenProvider.extractAccessToken(request).orElse(null);
 
@@ -67,7 +67,7 @@ public class SeeController {
             throw new CustomException(ErrorStatus.USER_NOT_FOUND_ERROR);
         }
 
-        seeService.updateSee(userId, seeId, seeViewDTO);
+        seeService.updateSee(userId, seeId, seeRequestDTO);
         return ApiResponse.success(SuccessStatus.OK);
     }
 

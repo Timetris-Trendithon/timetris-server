@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.concurrent.CancellationException;
 
 @Service
 @RequiredArgsConstructor
@@ -34,19 +35,21 @@ public class DoServiceImpl implements DoService{
         UserDate userDate = userDateRepository.findByUser_IdAndDate_Id(userId, date.getId());
         Category category = categoryRepository.findById(doRequestDTO.getCategoryId())
                 .orElseThrow(() -> new CustomException(ErrorStatus.CATEGORY_NOT_FOUND_ERROR));
-        DoCreateDTO doCreateDTO = new DoCreateDTO(doRequestDTO.getTitle(), doRequestDTO.getStartTime(), doRequestDTO.getEndTime(), category, userDate);
+        DoCreateDTO doCreateDTO = new DoCreateDTO(doRequestDTO.getTitle(), doRequestDTO.getStartTime(), doRequestDTO.getEndTime(), category);
         Do done = new Do(doCreateDTO, userDate);
         return doRepository.save(done);
     }
 
     @Override
-    public void updateDo(long userId, long doId, DoViewDTO doViewDTO) {
+    public void updateDo(long userId, long doId, DoRequestDTO doRequestDTO) {
         Do done = doRepository.findById(doId)
                 .orElseThrow(() -> new CustomException(ErrorStatus.DO_NOT_FOUND_ERROR));
         if (done.getUserDate().getUser().getId() != userId){
             throw new CustomException(ErrorStatus.NO_PERMISSION_ERROR);
         }
-        done.updateDo(doViewDTO.getTitle(), doViewDTO.getStartTime(), doViewDTO.getEndTime());
+        Category category = categoryRepository.findById(doRequestDTO.getCategoryId())
+                .orElseThrow(() -> new CustomException(ErrorStatus.CATEGORY_NOT_FOUND_ERROR));
+        done.updateDo(doRequestDTO.getTitle(), doRequestDTO.getStartTime(), doRequestDTO.getEndTime(), category);
     }
 
     @Override
