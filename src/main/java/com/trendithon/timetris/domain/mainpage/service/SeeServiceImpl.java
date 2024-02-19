@@ -32,19 +32,19 @@ public class SeeServiceImpl implements SeeService{
         LocalDate localDate = LocalDate.now();
         Date date = dateRepository.findByDate(localDate);
         UserDate userDate = userDateRepository.findByUser_IdAndDate_Id(userId, date.getId());
-        SeeCreateDTO seeCreateDTO = new SeeCreateDTO(seeRequestDTO.getContent(), userDate);
+        SeeCreateDTO seeCreateDTO = new SeeCreateDTO(seeRequestDTO.getContent());
         See see = new See(seeCreateDTO, userDate);
         return seeRepository.save(see);
     }
 
     @Override
-    public void updateSee(long userId, long seeId, SeeViewDTO seeViewDTO) {
+    public void updateSee(long userId, long seeId, SeeRequestDTO seeRequestDTO) {
         See see = seeRepository.findById(seeId)
                 .orElseThrow(() -> new CustomException(ErrorStatus.SEE_NOT_FOUND_ERROR));
         if (see.getUserDate().getUser().getId() != userId){
             throw new CustomException(ErrorStatus.NO_PERMISSION_ERROR);
         }
-        see.updateSee(seeViewDTO.getContent());
+        see.updateSee(seeRequestDTO.getContent());
     }
 
     @Override

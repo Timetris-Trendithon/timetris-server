@@ -51,7 +51,7 @@ public class DoController {
     @PutMapping("/{doId}")
     public ApiResponse updateDo(HttpServletRequest request,
                                 @PathVariable long doId,
-                                @RequestBody DoViewDTO doViewDTO)
+                                @RequestBody DoRequestDTO doRequestDTO)
     {
         String accessToken = tokenProvider.extractAccessToken(request).orElse(null);
 
@@ -67,7 +67,7 @@ public class DoController {
             throw new CustomException(ErrorStatus.USER_NOT_FOUND_ERROR);
         }
 
-        doService.updateDo(userId, doId, doViewDTO);
+        doService.updateDo(userId, doId, doRequestDTO);
         return ApiResponse.success(SuccessStatus.OK);
     }
 

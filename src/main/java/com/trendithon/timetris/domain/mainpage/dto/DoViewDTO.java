@@ -16,6 +16,7 @@ import java.time.LocalTime;
 @AllArgsConstructor @NoArgsConstructor
 public class DoViewDTO {
 
+    private long id;
     private String title;
     private LocalTime startTime;
     private LocalTime endTime;
@@ -23,6 +24,7 @@ public class DoViewDTO {
 
     public static DoViewDTO of(Do does){
         return DoViewDTO.builder()
+                .id(does.getId())
                 .title(does.getTitle())
                 .startTime(does.getStartTime())
                 .endTime(does.getEndTime())

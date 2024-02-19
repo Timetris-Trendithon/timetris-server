@@ -36,10 +36,11 @@ public class Plan {
         this.userDate = userDate;
     }
 
-    public void updatePlan(String title, LocalTime startTime, LocalTime endTime){
+    public void updatePlan(String title, LocalTime startTime, LocalTime endTime, Category category){
         this.title = title;
         this.startTime = startTime;
         this.endTime = endTime;
+        this.category = category;
     }
 
     public void donePlan(){

@@ -35,7 +35,7 @@ public class CategoryServiceImpl implements CategoryService{
     public Category createCategory(long userId, CategoryRequestDTO categoryRequestDTO) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorStatus.USER_NOT_FOUND_ERROR));
-        CategoryCreateDTO categoryCreateDTO = new CategoryCreateDTO(categoryRequestDTO.getName(), categoryRequestDTO.getColorCode(), user);
+        CategoryCreateDTO categoryCreateDTO = new CategoryCreateDTO(categoryRequestDTO.getName(), categoryRequestDTO.getColorCode());
         Category category = new Category(categoryCreateDTO, user);
         return categoryRepository.save(category);
     }
@@ -48,6 +48,7 @@ public class CategoryServiceImpl implements CategoryService{
             throw new CustomException(ErrorStatus.NO_PERMISSION_ERROR);
         }
         category.updateCategory(categoryViewDTO.getName(), categoryViewDTO.getColorCode());
+        categoryRepository.save(category);
     }
 
     @Override

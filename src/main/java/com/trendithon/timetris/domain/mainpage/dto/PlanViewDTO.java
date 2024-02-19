@@ -15,6 +15,7 @@ import java.time.LocalTime;
 @AllArgsConstructor @NoArgsConstructor
 public class PlanViewDTO {
 
+    private long id;
     private String title;
     private LocalTime startTime;
     private LocalTime endTime;
@@ -23,6 +24,7 @@ public class PlanViewDTO {
 
     public static PlanViewDTO of(Plan plan){
         return PlanViewDTO.builder()
+                .id(plan.getId())
                 .title(plan.getTitle())
                 .startTime(plan.getStartTime())
                 .endTime(plan.getEndTime())

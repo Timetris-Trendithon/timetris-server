@@ -34,19 +34,22 @@ public class PlanServiceImpl implements PlanService {
         UserDate userDate = userDateRepository.findByUser_IdAndDate_Id(userId, date.getId());
         Category category = categoryRepository.findById(planRequestDTO.getCategoryId())
                 .orElseThrow(() -> new CustomException(ErrorStatus.CATEGORY_NOT_FOUND_ERROR));
-        PlanCreateDTO planCreateDTO = new PlanCreateDTO(planRequestDTO.getTitle(), planRequestDTO.getStartTime(), planRequestDTO.getEndTime(), planRequestDTO.isStatus(), category, userDate);
+        PlanCreateDTO planCreateDTO = new PlanCreateDTO(planRequestDTO.getTitle(), planRequestDTO.getStartTime(), planRequestDTO.getEndTime(), planRequestDTO.isStatus(), category);
         Plan plan = new Plan(planCreateDTO, userDate);
         return planRepository.save(plan);
     }
 
     @Override
-    public void updatePlan(long userId, long planId, PlanViewDTO planViewDTO) {
+    public void updatePlan(long userId, long planId, PlanRequestDTO planRequestDTO) {
         Plan plan = planRepository.findById(planId)
                 .orElseThrow(() -> new CustomException(ErrorStatus.PLAN_NOT_FOUND_ERROR));
+        long categoryId = planRequestDTO.getCategoryId();
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new CustomException(ErrorStatus.CATEGORY_NOT_FOUND_ERROR));
         if (plan.getUserDate().getUser().getId() != userId) {
             throw new CustomException(ErrorStatus.NO_PERMISSION_ERROR);
         }
-        plan.updatePlan(planViewDTO.getTitle(), planViewDTO.getStartTime(), planViewDTO.getEndTime());
+        plan.updatePlan(planRequestDTO.getTitle(), planRequestDTO.getStartTime(), planRequestDTO.getEndTime(), category);
     }
 
     @Override

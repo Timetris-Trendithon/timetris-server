@@ -53,7 +53,7 @@ public class PlanController {
     @PutMapping("/{planId}")
     public ApiResponse updatePlan(HttpServletRequest request,
                                   @PathVariable long planId,
-                                  @RequestBody PlanViewDTO planViewDTO)
+                                  @RequestBody PlanRequestDTO planRequestDTO)
     {
         String accessToken = tokenProvider.extractAccessToken(request).orElse(null);
 
@@ -69,7 +69,7 @@ public class PlanController {
             throw new CustomException(ErrorStatus.USER_NOT_FOUND_ERROR);
         }
 
-        planService.updatePlan(userId, planId, planViewDTO);
+        planService.updatePlan(userId, planId, planRequestDTO);
         return ApiResponse.success(SuccessStatus.OK);
     }
 

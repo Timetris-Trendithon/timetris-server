@@ -9,6 +9,6 @@ import org.springframework.stereotype.Service;
 @Service
 public interface SeeService {
     See createSee(long userId, SeeRequestDTO seeRequestDTO);
-    void updateSee(long userId, long seeId, SeeViewDTO seeViewDTO);
+    void updateSee(long userId, long seeId, SeeRequestDTO seeRequestDTO);
     void deleteSee(long userId, long seeId);
 }

@@ -9,6 +9,5 @@ import lombok.NoArgsConstructor;
 public class SeeRequestDTO {
 
     private String content;
-    private long userDateId;
 
 }

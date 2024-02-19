@@ -11,6 +11,5 @@ public class CategoryCreateDTO {
 
     private String name;
     private String colorCode;
-    private User user;
 
 }
