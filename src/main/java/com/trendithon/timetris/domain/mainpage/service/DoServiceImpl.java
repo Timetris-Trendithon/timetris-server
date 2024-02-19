@@ -50,6 +50,7 @@ public class DoServiceImpl implements DoService{
         Category category = categoryRepository.findById(doRequestDTO.getCategoryId())
                 .orElseThrow(() -> new CustomException(ErrorStatus.CATEGORY_NOT_FOUND_ERROR));
         done.updateDo(doRequestDTO.getTitle(), doRequestDTO.getStartTime(), doRequestDTO.getEndTime(), category);
+        doRepository.save(done);
     }
 
     @Override
