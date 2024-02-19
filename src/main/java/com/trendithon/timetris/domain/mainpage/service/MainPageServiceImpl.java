@@ -9,6 +9,7 @@ import com.trendithon.timetris.domain.mainpage.dto.UserDateCreateDTO;
 import com.trendithon.timetris.domain.mainpage.repository.*;
 import com.trendithon.timetris.global.exception.CustomException;
 import com.trendithon.timetris.global.exception.enums.ErrorStatus;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -29,9 +30,13 @@ public class MainPageServiceImpl implements MainPageService{
     private final UserRepository userRepository;
 
     @Override
-    public MainPageDTO getMainPage(long userId) {
+    public MainPageDTO getMainPage(long userId, HttpServletRequest request) {
         LocalDate localDate = LocalDate.now();
         Date date = dateRepository.findByDate(localDate);
+
+        String userName = (String) request.getSession().getAttribute("name");
+        String accessToken = (String) request.getSession().getAttribute("token");
+
         if (userRepository.findById(userId).isEmpty()){
             throw new CustomException(ErrorStatus.USER_NOT_FOUND_ERROR);
         }
@@ -41,7 +46,12 @@ public class MainPageServiceImpl implements MainPageService{
         List<Do> doList = doRepository.findAllByUserDate(userDate);
         List<See> see = seeRepository.findByUserDate(userDate);
 
-        return MainPageDTO.from(planList, doList, see);
+        return MainPageDTO.from(accessToken, userName, planList, doList, see);
+    }
+    @Override
+    public Long getUserId(String userName, String imgUrl) {
+        Optional<User> user = userRepository.findByNameAndProfile(userName, imgUrl);
+        return user.get().getId();
     }
 
     @Override
