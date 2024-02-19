@@ -35,10 +35,11 @@ public class Do {
         this.userDate = userDate;
     }
 
-    public void updateDo(String title, LocalTime startTime, LocalTime endTime){
+    public void updateDo(String title, LocalTime startTime, LocalTime endTime, Category category){
         this.title = title;
         this.startTime = startTime;
         this.endTime = endTime;
+        this.category = category;
     }
 
 }
