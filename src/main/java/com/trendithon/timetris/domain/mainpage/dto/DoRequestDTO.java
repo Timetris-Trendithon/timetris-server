@@ -11,8 +11,8 @@ import java.time.LocalTime;
 public class DoRequestDTO {
 
     private String title;
-    private LocalTime startTime;
-    private LocalTime endTime;
+    private String startTime;
+    private String endTime;
     private long categoryId;
 
 }
