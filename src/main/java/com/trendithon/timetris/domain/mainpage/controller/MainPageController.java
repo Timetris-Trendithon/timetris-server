@@ -27,19 +27,9 @@ public class MainPageController {
 
     @GetMapping("")
     public ApiResponse<MainPageDTO> getMainPage(HttpServletRequest request) {
-        String accessToken = tokenProvider.extractAccessToken(request).orElse(null);
 
-        Long userId = null;
+        Long userId = tokenProvider.getUserId(request);
 
-        if (accessToken != null) {
-            userId = tokenProvider.extractId(accessToken).orElse(null);
-        } else {
-            return ApiResponse.failure(ErrorStatus.NOT_LOGIN_ERROR);
-
-        }
-        if(userId == null) {
-            throw new CustomException(ErrorStatus.USER_NOT_FOUND_ERROR);
-        }
         MainPageDTO mainPageDTO = mainPageService.getMainPage(userId);
         return ApiResponse.success(SuccessStatus.OK, mainPageDTO);
     }

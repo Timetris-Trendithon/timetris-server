@@ -4,8 +4,6 @@ import com.trendithon.timetris.domain.member.dto.MyPageResponse;
 import com.trendithon.timetris.domain.member.service.MyPageService;
 import com.trendithon.timetris.global.auth.jwt.TokenProvider;
 import com.trendithon.timetris.global.exception.ApiResponse;
-import com.trendithon.timetris.global.exception.CustomException;
-import com.trendithon.timetris.global.exception.enums.ErrorStatus;
 import com.trendithon.timetris.global.exception.enums.SuccessStatus;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -24,20 +22,7 @@ public class MyPageController {
     @GetMapping
     public ApiResponse<MyPageResponse.getMyPageDTO> getMyPage(HttpServletRequest request) {
 
-        String accessToken = tokenProvider.extractAccessToken(request).orElse(null);
-
-        Long userId = null;
-
-        if (accessToken != null) {
-            userId = tokenProvider.extractId(accessToken).orElse(null);
-        } else {
-            return ApiResponse.failure(ErrorStatus.NOT_LOGIN_ERROR);
-
-        }
-
-        if(userId == null) {
-            throw new CustomException(ErrorStatus.USER_NOT_FOUND_ERROR);
-        }
+        Long userId = tokenProvider.getUserId(request);
 
         MyPageResponse.getMyPageDTO myPage = myPageService.getMyPage(userId);
 

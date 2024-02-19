@@ -23,31 +23,14 @@ public class DoController {
     private final DoService doService;
     private final TokenProvider tokenProvider;
 
-    public long getUserId(HttpServletRequest request){
-        String accessToken = tokenProvider.extractAccessToken(request).orElse(null);
-
-        Long userId = null;
-
-        if (accessToken != null) {
-            userId = tokenProvider.extractId(accessToken).orElse(null);
-        } else {
-            throw new CustomException(ErrorStatus.NOT_LOGIN_ERROR);
-
-        }
-        if(userId == null) {
-            throw new CustomException(ErrorStatus.USER_NOT_FOUND_ERROR);
-        }
-        return userId;
-    }
 
     @PostMapping("")
     public ApiResponse createDo(HttpServletRequest request,
-                                @RequestBody DoRequestDTO doRequestDTO)
-    {
-        long userId = getUserId(request);
+                                @RequestBody DoRequestDTO doRequestDTO) {
+        Long userId = tokenProvider.getUserId(request);
 
         Do done = doService.createDo(userId, doRequestDTO);
-        if (done == null){
+        if (done == null) {
             throw new CustomException(ErrorStatus.INVALID_FORMAT_ERROR);
         }
         return ApiResponse.success(SuccessStatus.OK);
@@ -56,9 +39,8 @@ public class DoController {
     @PutMapping("/{doId}")
     public ApiResponse updateDo(HttpServletRequest request,
                                 @PathVariable long doId,
-                                @RequestBody DoRequestDTO doRequestDTO)
-    {
-        long userId = getUserId(request);
+                                @RequestBody DoRequestDTO doRequestDTO) {
+        Long userId = tokenProvider.getUserId(request);
 
         doService.updateDo(userId, doId, doRequestDTO);
         return ApiResponse.success(SuccessStatus.OK);
@@ -66,9 +48,8 @@ public class DoController {
 
     @DeleteMapping("/{doId}")
     public ApiResponse deleteDo(HttpServletRequest request,
-                                @PathVariable long doId)
-    {
-        long userId = getUserId(request);
+                                @PathVariable long doId) {
+        Long userId = tokenProvider.getUserId(request);
 
         doService.deleteDo(userId, doId);
         return ApiResponse.success(SuccessStatus.OK);

@@ -23,31 +23,13 @@ public class SeeController {
     private final SeeService seeService;
     private final TokenProvider tokenProvider;
 
-    public long getUserId(HttpServletRequest request){
-        String accessToken = tokenProvider.extractAccessToken(request).orElse(null);
-
-        Long userId = null;
-
-        if (accessToken != null) {
-            userId = tokenProvider.extractId(accessToken).orElse(null);
-        } else {
-            throw new CustomException(ErrorStatus.NOT_LOGIN_ERROR);
-
-        }
-        if(userId == null) {
-            throw new CustomException(ErrorStatus.USER_NOT_FOUND_ERROR);
-        }
-        return userId;
-    }
-
     @PostMapping("")
     public ApiResponse createSee(HttpServletRequest request,
-                                 @RequestBody SeeRequestDTO seeRequestDTO)
-    {
-        long userId = getUserId(request);
+                                 @RequestBody SeeRequestDTO seeRequestDTO) {
+        Long userId = tokenProvider.getUserId(request);
 
         See see = seeService.createSee(userId, seeRequestDTO);
-        if (see == null){
+        if (see == null) {
             throw new CustomException(ErrorStatus.SEE_NOT_FOUND_ERROR);
         }
         return ApiResponse.success(SuccessStatus.OK);
@@ -56,9 +38,8 @@ public class SeeController {
     @PutMapping("/{seeId}")
     public ApiResponse updateSee(HttpServletRequest request,
                                  @PathVariable long seeId,
-                                 @RequestBody SeeRequestDTO seeRequestDTO)
-    {
-        long userId = getUserId(request);
+                                 @RequestBody SeeRequestDTO seeRequestDTO) {
+        Long userId = tokenProvider.getUserId(request);
 
         seeService.updateSee(userId, seeId, seeRequestDTO);
         return ApiResponse.success(SuccessStatus.OK);
@@ -66,9 +47,8 @@ public class SeeController {
 
     @DeleteMapping("/{seeId}")
     public ApiResponse deleteSee(HttpServletRequest request,
-                                 @PathVariable long seeId)
-    {
-        long userId = getUserId(request);
+                                 @PathVariable long seeId) {
+        Long userId = tokenProvider.getUserId(request);
 
         seeService.deleteSee(userId, seeId);
         return ApiResponse.success(SuccessStatus.OK);
