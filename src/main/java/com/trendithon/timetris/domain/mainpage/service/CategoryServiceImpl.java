@@ -41,13 +41,13 @@ public class CategoryServiceImpl implements CategoryService{
     }
 
     @Override
-    public void updateCategory(long userId, long categoryId, CategoryViewDTO categoryViewDTO) {
+    public void updateCategory(long userId, long categoryId, CategoryRequestDTO categoryRequestDTO) {
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new CustomException(ErrorStatus.CATEGORY_NOT_FOUND_ERROR));
         if (category.getUser().getId() != userId){
             throw new CustomException(ErrorStatus.NO_PERMISSION_ERROR);
         }
-        category.updateCategory(categoryViewDTO.getName(), categoryViewDTO.getColorCode());
+        category.updateCategory(categoryRequestDTO.getName(), categoryRequestDTO.getColorCode());
         categoryRepository.save(category);
     }
 

@@ -5,6 +5,7 @@ import com.trendithon.timetris.domain.mainpage.dto.PlanViewDTO;
 import com.trendithon.timetris.domain.mainpage.repository.PlanRepository;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 
 import java.time.LocalTime;
 
@@ -19,7 +20,7 @@ public class Plan {
     private String title;
     private LocalTime startTime;
     private LocalTime endTime;
-    private boolean status = false;
+    private boolean status;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "categoryId")
     private Category category;
