@@ -33,16 +33,13 @@ public class MainPageController {
         return ApiResponse.success(SuccessStatus.OK, mainPageDTO);
     }
 
-//    @GetMapping
-//    public ApiResponse<MainPageDTO> getMainPage(HttpServletRequest request) {
-//        String userName = (String) request.getSession().getAttribute("name");
-//        String imgUrl = (String) request.getSession().getAttribute("picture");
-//        //String accessToken = (String) request.getSession().getAttribute("token");
-//
-//        Long userId = mainPageService.getUserId(userName, imgUrl);
-//
-//        MainPageDTO mainPageDTO = mainPageService.getMainPage(userId, request);
-//        return ApiResponse.success(SuccessStatus.OK, mainPageDTO);
-//    }
+    @GetMapping("/test")
+    public ApiResponse<MainPageDTO> getMainPage2(HttpServletRequest request) {
+
+        Long userId = tokenProvider.getUserId(request);
+
+        MainPageDTO mainPageDTO = mainPageService.getMainPage(userId);
+        return ApiResponse.success(SuccessStatus.OK, mainPageDTO);
+    }
 
 }
