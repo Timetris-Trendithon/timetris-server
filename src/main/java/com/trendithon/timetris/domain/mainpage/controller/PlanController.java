@@ -25,10 +25,7 @@ public class PlanController {
     private final PlanService planService;
     private final TokenProvider tokenProvider;
 
-    @PostMapping("")
-    public ApiResponse createPlan(HttpServletRequest request,
-                                        @RequestBody PlanRequestDTO planRequestDTO)
-    {
+    public long getUserId(HttpServletRequest request){
         String accessToken = tokenProvider.extractAccessToken(request).orElse(null);
 
         Long userId = null;
@@ -36,12 +33,20 @@ public class PlanController {
         if (accessToken != null) {
             userId = tokenProvider.extractId(accessToken).orElse(null);
         } else {
-            return ApiResponse.failure(ErrorStatus.NOT_LOGIN_ERROR);
+            throw new CustomException(ErrorStatus.NOT_LOGIN_ERROR);
 
         }
         if(userId == null) {
             throw new CustomException(ErrorStatus.USER_NOT_FOUND_ERROR);
         }
+        return userId;
+    }
+
+    @PostMapping("")
+    public ApiResponse createPlan(HttpServletRequest request,
+                                        @RequestBody PlanRequestDTO planRequestDTO)
+    {
+        long userId = getUserId(request);
 
         Plan plan = planService.createPlan(userId, planRequestDTO);
         if (plan == null){
@@ -55,19 +60,7 @@ public class PlanController {
                                   @PathVariable long planId,
                                   @RequestBody PlanRequestDTO planRequestDTO)
     {
-        String accessToken = tokenProvider.extractAccessToken(request).orElse(null);
-
-        Long userId = null;
-
-        if (accessToken != null) {
-            userId = tokenProvider.extractId(accessToken).orElse(null);
-        } else {
-            return ApiResponse.failure(ErrorStatus.NOT_LOGIN_ERROR);
-
-        }
-        if(userId == null) {
-            throw new CustomException(ErrorStatus.USER_NOT_FOUND_ERROR);
-        }
+        long userId = getUserId(request);
 
         planService.updatePlan(userId, planId, planRequestDTO);
         return ApiResponse.success(SuccessStatus.OK);
@@ -99,19 +92,7 @@ public class PlanController {
     public ApiResponse donePlan(HttpServletRequest request,
                                 @PathVariable long planId)
     {
-        String accessToken = tokenProvider.extractAccessToken(request).orElse(null);
-
-        Long userId = null;
-
-        if (accessToken != null) {
-            userId = tokenProvider.extractId(accessToken).orElse(null);
-        } else {
-            return ApiResponse.failure(ErrorStatus.NOT_LOGIN_ERROR);
-
-        }
-        if(userId == null) {
-            throw new CustomException(ErrorStatus.USER_NOT_FOUND_ERROR);
-        }
+        long userId = getUserId(request);
 
         planService.donePlan(userId, planId);
         return ApiResponse.success(SuccessStatus.OK);

@@ -23,10 +23,7 @@ public class DoController {
     private final DoService doService;
     private final TokenProvider tokenProvider;
 
-    @PostMapping("")
-    public ApiResponse createDo(HttpServletRequest request,
-                                @RequestBody DoRequestDTO doRequestDTO)
-    {
+    public long getUserId(HttpServletRequest request){
         String accessToken = tokenProvider.extractAccessToken(request).orElse(null);
 
         Long userId = null;
@@ -34,12 +31,20 @@ public class DoController {
         if (accessToken != null) {
             userId = tokenProvider.extractId(accessToken).orElse(null);
         } else {
-            return ApiResponse.failure(ErrorStatus.NOT_LOGIN_ERROR);
+            throw new CustomException(ErrorStatus.NOT_LOGIN_ERROR);
 
         }
         if(userId == null) {
             throw new CustomException(ErrorStatus.USER_NOT_FOUND_ERROR);
         }
+        return userId;
+    }
+
+    @PostMapping("")
+    public ApiResponse createDo(HttpServletRequest request,
+                                @RequestBody DoRequestDTO doRequestDTO)
+    {
+        long userId = getUserId(request);
 
         Do done = doService.createDo(userId, doRequestDTO);
         if (done == null){
@@ -53,19 +58,7 @@ public class DoController {
                                 @PathVariable long doId,
                                 @RequestBody DoRequestDTO doRequestDTO)
     {
-        String accessToken = tokenProvider.extractAccessToken(request).orElse(null);
-
-        Long userId = null;
-
-        if (accessToken != null) {
-            userId = tokenProvider.extractId(accessToken).orElse(null);
-        } else {
-            return ApiResponse.failure(ErrorStatus.NOT_LOGIN_ERROR);
-
-        }
-        if(userId == null) {
-            throw new CustomException(ErrorStatus.USER_NOT_FOUND_ERROR);
-        }
+        long userId = getUserId(request);
 
         doService.updateDo(userId, doId, doRequestDTO);
         return ApiResponse.success(SuccessStatus.OK);
@@ -75,19 +68,7 @@ public class DoController {
     public ApiResponse deleteDo(HttpServletRequest request,
                                 @PathVariable long doId)
     {
-        String accessToken = tokenProvider.extractAccessToken(request).orElse(null);
-
-        Long userId = null;
-
-        if (accessToken != null) {
-            userId = tokenProvider.extractId(accessToken).orElse(null);
-        } else {
-            return ApiResponse.failure(ErrorStatus.NOT_LOGIN_ERROR);
-
-        }
-        if(userId == null) {
-            throw new CustomException(ErrorStatus.USER_NOT_FOUND_ERROR);
-        }
+        long userId = getUserId(request);
 
         doService.deleteDo(userId, doId);
         return ApiResponse.success(SuccessStatus.OK);

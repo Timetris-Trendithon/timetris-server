@@ -25,9 +25,7 @@ public class CategoryController {
     private final CategoryService categoryService;
     private final TokenProvider tokenProvider;
 
-    @GetMapping("")
-    public ApiResponse<List<CategoryViewDTO>> readCategoryAll(HttpServletRequest request)
-    {
+    public long getUserId(HttpServletRequest request){
         String accessToken = tokenProvider.extractAccessToken(request).orElse(null);
 
         Long userId = null;
@@ -35,12 +33,19 @@ public class CategoryController {
         if (accessToken != null) {
             userId = tokenProvider.extractId(accessToken).orElse(null);
         } else {
-            return ApiResponse.failure(ErrorStatus.NOT_LOGIN_ERROR);
+            throw new CustomException(ErrorStatus.NOT_LOGIN_ERROR);
 
         }
         if(userId == null) {
             throw new CustomException(ErrorStatus.USER_NOT_FOUND_ERROR);
         }
+        return userId;
+    }
+
+    @GetMapping("")
+    public ApiResponse<List<CategoryViewDTO>> readCategoryAll(HttpServletRequest request)
+    {
+        long userId = getUserId(request);
 
         List<CategoryViewDTO> categoryList = categoryService.readCategoryAll(userId);
         return ApiResponse.success(SuccessStatus.OK, categoryList);
@@ -50,19 +55,7 @@ public class CategoryController {
     public ApiResponse<CategoryRequestDTO> createCategory(HttpServletRequest request,
                                       @RequestBody CategoryRequestDTO categoryRequestDTO)
     {
-        String accessToken = tokenProvider.extractAccessToken(request).orElse(null);
-
-        Long userId = null;
-
-        if (accessToken != null) {
-            userId = tokenProvider.extractId(accessToken).orElse(null);
-        } else {
-            return ApiResponse.failure(ErrorStatus.NOT_LOGIN_ERROR);
-
-        }
-        if(userId == null) {
-            throw new CustomException(ErrorStatus.USER_NOT_FOUND_ERROR);
-        }
+        long userId = getUserId(request);
 
         Category category = categoryService.createCategory(userId, categoryRequestDTO);
         if (category == null){
@@ -76,19 +69,7 @@ public class CategoryController {
                                       @PathVariable long categoryId,
                                       @RequestBody CategoryRequestDTO categoryRequestDTO)
     {
-        String accessToken = tokenProvider.extractAccessToken(request).orElse(null);
-
-        Long userId = null;
-
-        if (accessToken != null) {
-            userId = tokenProvider.extractId(accessToken).orElse(null);
-        } else {
-            return ApiResponse.failure(ErrorStatus.NOT_LOGIN_ERROR);
-
-        }
-        if(userId == null) {
-            throw new CustomException(ErrorStatus.USER_NOT_FOUND_ERROR);
-        }
+        long userId = getUserId(request);
 
         categoryService.updateCategory(userId, categoryId, categoryRequestDTO);
         return ApiResponse.success(SuccessStatus.OK, categoryRequestDTO);
@@ -98,19 +79,7 @@ public class CategoryController {
     public ApiResponse deleteCategory(HttpServletRequest request,
                                       @PathVariable long categoryId)
     {
-        String accessToken = tokenProvider.extractAccessToken(request).orElse(null);
-
-        Long userId = null;
-
-        if (accessToken != null) {
-            userId = tokenProvider.extractId(accessToken).orElse(null);
-        } else {
-            return ApiResponse.failure(ErrorStatus.NOT_LOGIN_ERROR);
-
-        }
-        if(userId == null) {
-            throw new CustomException(ErrorStatus.USER_NOT_FOUND_ERROR);
-        }
+        long userId = getUserId(request);
 
         categoryService.deleteCategory(userId, categoryId);
         return ApiResponse.success(SuccessStatus.OK);
