@@ -32,8 +32,8 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         try {
             CustomOAuth2User oAuth2User = (CustomOAuth2User) authentication.getPrincipal();
 
-            String userName = oAuth2User.getAttribute("name");
-            String imgUrl = oAuth2User.getAttribute("picture");
+//            String userName = oAuth2User.getAttribute("name");
+//            String imgUrl = oAuth2User.getAttribute("picture");
 
             String accessToken;
             if (oAuth2User.getRole() == Role.GUEST) {
@@ -44,13 +44,14 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
             } else {
                 accessToken = loginSuccess(response, oAuth2User);
             }
-            request.getSession().setAttribute("token", accessToken);
 
-            request.getSession().setAttribute("name", userName);
-            request.getSession().setAttribute("picture", imgUrl);
+            String redirectUrl = "http://localhost:3000?accessToken=" + accessToken;
 
-            //response.sendRedirect("/main");
-            response.sendRedirect(UriComponentsBuilder.fromUriString("http://localhost:3000/").toUriString());
+//            request.getSession().setAttribute("token", accessToken);
+//            request.getSession().setAttribute("name", userName);
+//            request.getSession().setAttribute("picture", imgUrl);
+
+            response.sendRedirect(redirectUrl);
 
         } catch (Exception e) {
             throw e;

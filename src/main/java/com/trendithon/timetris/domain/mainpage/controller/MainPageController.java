@@ -2,6 +2,7 @@ package com.trendithon.timetris.domain.mainpage.controller;
 
 import com.trendithon.timetris.domain.mainpage.dto.MainPageDTO;
 import com.trendithon.timetris.domain.mainpage.service.MainPageService;
+import com.trendithon.timetris.domain.member.dto.MyPageResponse;
 import com.trendithon.timetris.global.auth.jwt.TokenProvider;
 import com.trendithon.timetris.global.exception.ApiResponse;
 import com.trendithon.timetris.global.exception.enums.SuccessStatus;
@@ -23,15 +24,25 @@ public class MainPageController {
     private final TokenProvider tokenProvider;
 
     @GetMapping
-    public ApiResponse<MainPageDTO> getMainPage(HttpServletRequest request) {
-        String userName = (String) request.getSession().getAttribute("name");
-        String imgUrl = (String) request.getSession().getAttribute("picture");
-        //String accessToken = (String) request.getSession().getAttribute("token");
+    public ApiResponse<MyPageResponse.getMyPageDTO> getMainPage(HttpServletRequest request) {
 
-        Long userId = mainPageService.getUserId(userName, imgUrl);
+        Long userId = tokenProvider.getUserId(request);
 
-        MainPageDTO mainPageDTO = mainPageService.getMainPage(userId, request);
+        MyPageResponse.getMyPageDTO mainPageDTO = mainPageService.getUserInfo(userId);
+
         return ApiResponse.success(SuccessStatus.OK, mainPageDTO);
     }
+
+//    @GetMapping
+//    public ApiResponse<MainPageDTO> getMainPage(HttpServletRequest request) {
+//        String userName = (String) request.getSession().getAttribute("name");
+//        String imgUrl = (String) request.getSession().getAttribute("picture");
+//        //String accessToken = (String) request.getSession().getAttribute("token");
+//
+//        Long userId = mainPageService.getUserId(userName, imgUrl);
+//
+//        MainPageDTO mainPageDTO = mainPageService.getMainPage(userId, request);
+//        return ApiResponse.success(SuccessStatus.OK, mainPageDTO);
+//    }
 
 }
