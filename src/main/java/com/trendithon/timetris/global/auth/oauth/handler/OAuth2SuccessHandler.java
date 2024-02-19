@@ -43,7 +43,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
             }
 
             request.getSession().setAttribute("name", userName);
-            response.sendRedirect("/main");
+            //response.sendRedirect("/main");
 
         } catch (Exception e) {
             throw e;
