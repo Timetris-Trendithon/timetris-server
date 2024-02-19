@@ -12,6 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
 
@@ -48,8 +49,8 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
             request.getSession().setAttribute("name", userName);
             request.getSession().setAttribute("picture", imgUrl);
 
-            response.sendRedirect("/main");
-            //response.sendRedirect(UriComponentsBuilder.fromUriString("http://localhost:3000/").toUriString());
+            //response.sendRedirect("/main");
+            response.sendRedirect(UriComponentsBuilder.fromUriString("http://localhost:3000/").toUriString());
 
         } catch (Exception e) {
             throw e;
