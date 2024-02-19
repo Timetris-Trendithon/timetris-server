@@ -2,6 +2,7 @@ package com.trendithon.timetris.global.config;
 
 import com.trendithon.timetris.global.auth.oauth.handler.OAuth2SuccessHandler;
 import com.trendithon.timetris.global.auth.oauth.service.CustomOAuthService;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer.FrameOptionsConfig;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -51,9 +52,20 @@ public class SecurityConfig {
                         oauth.userInfoEndpoint(c -> c.userService(customOAuthService))
                                 // 로그인 성공 시 핸들러
                                 .successHandler(oAuth2SuccessHandler)
-                );
+                )
 //                .logout(logout -> logout
-//                        .logoutSuccessUrl("/login")
+//                        .logoutSuccessUrl("/login"));
+                .logout(logout ->logout
+                .logoutUrl("/logout") // Customize the logout URL if needed
+                .logoutSuccessUrl("/login?logout") // Redirect to login page after logout
+                .invalidateHttpSession(true) // Invalidate HTTP session
+                .clearAuthentication(true) // Clear user authentication
+                .deleteCookies("JSESSIONID") // Delete cookies if any
+                .logoutSuccessHandler((request, response, authentication) -> {
+                    // Perform additional logout actions if needed
+                    response.setStatus(HttpStatus.OK.value());
+                })
+                .permitAll()); // Allow all users to logout
 
 
         return http.build();

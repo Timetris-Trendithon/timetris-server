@@ -8,7 +8,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Getter
 @AllArgsConstructor @NoArgsConstructor
@@ -17,8 +16,10 @@ public class MainPageDTO {
     List<PlanViewDTO> planViewDTOList;
     List<DoViewDTO> doViewDTOList;
     List<SeeViewDTO> seeViewDTO;
+    String userName;
+    String accessToken;
 
-    public static MainPageDTO from(List<Plan> planList, List<Do> doList, List<See> seeList){
+    public static MainPageDTO from(String accessToken, String username, List<Plan> planList, List<Do> doList, List<See> seeList){
         List<PlanViewDTO> planViewDTOS = planList.stream()
                 .map(PlanViewDTO::of)
                 .toList();
@@ -29,7 +30,7 @@ public class MainPageDTO {
                 .map(SeeViewDTO::of)
                 .toList();
 
-        return new MainPageDTO(planViewDTOS, doViewDTOS, seeViewDTO1);
+        return new MainPageDTO(planViewDTOS, doViewDTOS, seeViewDTO1, username, accessToken);
 
     }
 

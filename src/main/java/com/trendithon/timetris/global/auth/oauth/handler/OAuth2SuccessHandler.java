@@ -32,18 +32,24 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
             CustomOAuth2User oAuth2User = (CustomOAuth2User) authentication.getPrincipal();
 
             String userName = oAuth2User.getAttribute("name");
+            String imgUrl = oAuth2User.getAttribute("picture");
 
+            String accessToken;
             if (oAuth2User.getRole() == Role.GUEST) {
-                String accessToken = tokenProvider.createAccessToken(oAuth2User.getEmail());
+                accessToken = tokenProvider.createAccessToken(oAuth2User.getEmail());
                 response.addHeader(tokenProvider.getAccessHeader(), "Bearer " + accessToken);
                 tokenProvider.sendAccessAndRefreshToken(response, accessToken, null);
 
             } else {
-                loginSuccess(response, oAuth2User);
+                accessToken = loginSuccess(response, oAuth2User);
             }
+            request.getSession().setAttribute("token", accessToken);
 
             request.getSession().setAttribute("name", userName);
-            //response.sendRedirect("/main");
+            request.getSession().setAttribute("picture", imgUrl);
+
+            response.sendRedirect("/main");
+            //response.sendRedirect(UriComponentsBuilder.fromUriString("http://localhost:3000/").toUriString());
 
         } catch (Exception e) {
             throw e;
@@ -51,7 +57,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
     }
 
-    private void loginSuccess(HttpServletResponse response, CustomOAuth2User oAuth2User) throws IOException {
+    private String loginSuccess(HttpServletResponse response, CustomOAuth2User oAuth2User) throws IOException {
         String accessToken = tokenProvider.createAccessToken(oAuth2User.getEmail());
         String refreshToken = tokenProvider.createRefreshToken();
 
@@ -60,6 +66,8 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
         tokenProvider.sendAccessAndRefreshToken(response, accessToken, refreshToken);
         tokenProvider.updateRefreshToken(oAuth2User.getEmail(), refreshToken);
+
+        return accessToken;
 
     }
 }
