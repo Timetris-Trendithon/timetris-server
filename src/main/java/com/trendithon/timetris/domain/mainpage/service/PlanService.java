@@ -2,6 +2,7 @@ package com.trendithon.timetris.domain.mainpage.service;
 
 import com.trendithon.timetris.domain.mainpage.domain.Plan;
 import com.trendithon.timetris.domain.mainpage.dto.PlanCreateDTO;
+import com.trendithon.timetris.domain.mainpage.dto.PlanCycleRequestDTO;
 import com.trendithon.timetris.domain.mainpage.dto.PlanRequestDTO;
 import com.trendithon.timetris.domain.mainpage.dto.PlanViewDTO;
 import org.springframework.stereotype.Service;

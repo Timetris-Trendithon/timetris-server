@@ -8,6 +8,7 @@ import lombok.*;
 import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 
 import java.time.LocalTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -27,6 +28,8 @@ public class Plan {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userDateId")
     private UserDate userDate;
+    @OneToMany(mappedBy = "plan", cascade = CascadeType.ALL)
+    private List<Cycle> cycle;
 
     public Plan(PlanCreateDTO planCreateDTO, UserDate userDate){
         this.title = planCreateDTO.getTitle();
@@ -34,6 +37,15 @@ public class Plan {
         this.endTime = planCreateDTO.getEndTime();
         this.status = planCreateDTO.isStatus();
         this.category = planCreateDTO.getCategory();
+        this.userDate = userDate;
+    }
+
+    public Plan(Plan plan, UserDate userDate){
+        this.title = plan.getTitle();
+        this.startTime = plan.getStartTime();
+        this.endTime = plan.getEndTime();
+        this.status = plan.isStatus();
+        this.category = plan.getCategory();
         this.userDate = userDate;
     }
 
