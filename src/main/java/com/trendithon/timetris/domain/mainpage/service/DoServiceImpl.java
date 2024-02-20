@@ -16,6 +16,7 @@ import com.trendithon.timetris.global.exception.enums.ErrorStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -23,6 +24,7 @@ import java.util.concurrent.CancellationException;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class DoServiceImpl implements DoService{
 
     private final DoRepository doRepository;
