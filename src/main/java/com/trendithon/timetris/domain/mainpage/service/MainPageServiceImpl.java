@@ -33,11 +33,15 @@ public class MainPageServiceImpl implements MainPageService{
     public MainPageDTO getMainPage(long userId) {
         LocalDate localDate = LocalDate.now();
         Date date = dateRepository.findByDate(localDate);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorStatus.USER_NOT_FOUND_ERROR));
 
-        if (userRepository.findById(userId).isEmpty()){
-            throw new CustomException(ErrorStatus.USER_NOT_FOUND_ERROR);
-        }
         UserDate userDate = userDateRepository.findByUser_IdAndDate_Id(userId, date.getId());
+        if (userDate == null){
+            UserDateCreateDTO userDateCreateDTO = new UserDateCreateDTO(user, date);
+            UserDate userDate1 = new UserDate(userDateCreateDTO);
+            userDateRepository.save(userDate1);
+        }
 
         List<Plan> planList = planRepository.findAllByUserDate(userDate);
         List<Do> doList = doRepository.findAllByUserDate(userDate);
@@ -63,6 +67,7 @@ public class MainPageServiceImpl implements MainPageService{
         DateCreateDTO dateCreateDTO = new DateCreateDTO(localDate);
         Date date = new Date(dateCreateDTO);
         dateRepository.save(date);
+        System.out.println("created Date: "+localDate);
         users.stream()
                 .forEach(user -> {
                     UserDateCreateDTO userDateCreateDTO = new UserDateCreateDTO(user, date);

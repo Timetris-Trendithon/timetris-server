@@ -23,7 +23,7 @@ public class MainPageController {
     private final MainPageService mainPageService;
     private final TokenProvider tokenProvider;
 
-    @GetMapping
+//    @GetMapping
     public ApiResponse<MyPageResponse.getMyPageDTO> getMainPage(HttpServletRequest request) {
 
         Long userId = tokenProvider.getUserId(request);
@@ -33,7 +33,7 @@ public class MainPageController {
         return ApiResponse.success(SuccessStatus.OK, mainPageDTO);
     }
 
-    @GetMapping("/test")
+    @GetMapping("")
     public ApiResponse<MainPageDTO> getMainPage2(HttpServletRequest request) {
 
         Long userId = tokenProvider.getUserId(request);
