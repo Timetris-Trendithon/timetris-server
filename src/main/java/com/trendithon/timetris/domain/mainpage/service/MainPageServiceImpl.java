@@ -13,6 +13,7 @@ import com.trendithon.timetris.global.exception.enums.ErrorStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -20,6 +21,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class MainPageServiceImpl implements MainPageService{
 
     private final PlanRepository planRepository;
@@ -61,6 +63,7 @@ public class MainPageServiceImpl implements MainPageService{
 
     @Override
     @Scheduled(cron = "0 0 0 * * *")
+    @Transactional
     public void createUserDate() {
         List<User> users = userRepository.findAll();
         LocalDate localDate = LocalDate.now();

@@ -15,12 +15,14 @@ import com.trendithon.timetris.global.exception.CustomException;
 import com.trendithon.timetris.global.exception.enums.ErrorStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class PlanServiceImpl implements PlanService {
 
     private final PlanRepository planRepository;

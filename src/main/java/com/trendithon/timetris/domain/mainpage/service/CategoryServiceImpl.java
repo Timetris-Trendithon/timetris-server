@@ -12,17 +12,20 @@ import com.trendithon.timetris.global.exception.CustomException;
 import com.trendithon.timetris.global.exception.enums.ErrorStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class CategoryServiceImpl implements CategoryService{
 
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
 
-//    @Override
+    @Override
+    @Transactional(readOnly = true)
     public List<CategoryViewDTO> readCategoryAll(long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorStatus.USER_NOT_FOUND_ERROR));
