@@ -1,9 +1,9 @@
 package com.trendithon.timetris.domain.mainpage.controller;
 
+import com.trendithon.timetris.domain.mainpage.domain.Cycle;
 import com.trendithon.timetris.domain.mainpage.domain.Plan;
-import com.trendithon.timetris.domain.mainpage.dto.PlanCreateDTO;
-import com.trendithon.timetris.domain.mainpage.dto.PlanRequestDTO;
-import com.trendithon.timetris.domain.mainpage.dto.PlanViewDTO;
+import com.trendithon.timetris.domain.mainpage.dto.*;
+import com.trendithon.timetris.domain.mainpage.service.CycleService;
 import com.trendithon.timetris.domain.mainpage.service.PlanService;
 import com.trendithon.timetris.domain.member.domain.User;
 import com.trendithon.timetris.global.auth.jwt.TokenProvider;
@@ -23,28 +23,34 @@ import org.springframework.web.bind.annotation.*;
 public class PlanController {
 
     private final PlanService planService;
+    private final CycleService cycleService;
     private final TokenProvider tokenProvider;
 
 
     @PostMapping("")
     public ApiResponse createPlan(HttpServletRequest request,
-                                  @RequestBody PlanRequestDTO planRequestDTO) {
+                                  @RequestBody PlanCycleRequestDTO planCycleRequestDTO) {
         Long userId = tokenProvider.getUserId(request);
 
+        PlanRequestDTO planRequestDTO = planCycleRequestDTO.getPlanRequestDTO();
+        CycleRequestDTO cycleRequestDTO = planCycleRequestDTO.getCycleRequestDTO();
         Plan plan = planService.createPlan(userId, planRequestDTO);
         if (plan == null) {
             throw new CustomException(ErrorStatus.INVALID_FORMAT_ERROR);
         }
+        cycleService.createCycle(plan, cycleRequestDTO);
         return ApiResponse.success(SuccessStatus.OK);
     }
 
     @PutMapping("/{planId}")
     public ApiResponse updatePlan(HttpServletRequest request,
                                   @PathVariable long planId,
-                                  @RequestBody PlanRequestDTO planRequestDTO) {
+                                  @RequestBody PlanCycleRequestDTO planCycleRequestDTO) {
+        PlanRequestDTO planRequestDTO = planCycleRequestDTO.getPlanRequestDTO();
+        CycleRequestDTO cycleRequestDTO = planCycleRequestDTO.getCycleRequestDTO();
         Long userId = tokenProvider.getUserId(request);
-
         planService.updatePlan(userId, planId, planRequestDTO);
+        cycleService.updateCycle(planId, cycleRequestDTO);
         return ApiResponse.success(SuccessStatus.OK);
     }
 

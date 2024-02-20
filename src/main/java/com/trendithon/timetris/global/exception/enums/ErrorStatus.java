@@ -20,6 +20,7 @@ public enum ErrorStatus {
     PLAN_NOT_FOUND_ERROR(HttpStatus.NOT_FOUND, "COMMOM400", "해당 plan을 찾을 수 없습니다."),
     DO_NOT_FOUND_ERROR(HttpStatus.NOT_FOUND, "COMMOM400", "해당 do를 찾을 수 없습니다."),
     SEE_NOT_FOUND_ERROR(HttpStatus.NOT_FOUND, "COMMOM400", "해당 see를 찾을 수 없습니다."),
+    CYCLE_NOT_FOUND_ERROR(HttpStatus.NOT_FOUND, "COMMON400", "해당 cycle을 찾을 수 없습니다."),
 
     // 회원 관련 에러
     USER_NOT_FOUND_ERROR(HttpStatus.NOT_FOUND, "USER400", "해당 유저를 찾을 수 없습니다."),

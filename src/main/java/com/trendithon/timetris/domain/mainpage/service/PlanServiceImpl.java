@@ -1,16 +1,8 @@
 package com.trendithon.timetris.domain.mainpage.service;
 
-import com.trendithon.timetris.domain.mainpage.domain.Category;
-import com.trendithon.timetris.domain.mainpage.domain.Date;
-import com.trendithon.timetris.domain.mainpage.domain.Plan;
-import com.trendithon.timetris.domain.mainpage.domain.UserDate;
-import com.trendithon.timetris.domain.mainpage.dto.PlanCreateDTO;
-import com.trendithon.timetris.domain.mainpage.dto.PlanRequestDTO;
-import com.trendithon.timetris.domain.mainpage.dto.PlanViewDTO;
-import com.trendithon.timetris.domain.mainpage.repository.CategoryRepository;
-import com.trendithon.timetris.domain.mainpage.repository.DateRepository;
-import com.trendithon.timetris.domain.mainpage.repository.PlanRepository;
-import com.trendithon.timetris.domain.mainpage.repository.UserDateRepository;
+import com.trendithon.timetris.domain.mainpage.domain.*;
+import com.trendithon.timetris.domain.mainpage.dto.*;
+import com.trendithon.timetris.domain.mainpage.repository.*;
 import com.trendithon.timetris.global.exception.CustomException;
 import com.trendithon.timetris.global.exception.enums.ErrorStatus;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +24,7 @@ public class PlanServiceImpl implements PlanService {
     private final DateRepository dateRepository;
     private final UserDateRepository userDateRepository;
     private final CategoryRepository categoryRepository;
+    private final CycleRepository cycleRepository;
 
     @Override
     public Plan createPlan(long userId, PlanRequestDTO planRequestDTO) {
@@ -43,7 +39,8 @@ public class PlanServiceImpl implements PlanService {
         LocalTime localEndTime = LocalTime.of(Integer.parseInt(endTime[0]), Integer.parseInt(endTime[1]));
         PlanCreateDTO planCreateDTO = new PlanCreateDTO(planRequestDTO.getTitle(), localStartTime, localEndTime, false, category);
         Plan plan = new Plan(planCreateDTO, userDate);
-        return planRepository.save(plan);
+        planRepository.save(plan);
+        return plan;
     }
 
     @Override
