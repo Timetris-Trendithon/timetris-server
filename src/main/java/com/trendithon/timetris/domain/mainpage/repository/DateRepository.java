@@ -11,6 +11,6 @@ import java.util.List;
 
 public interface DateRepository extends JpaRepository<Date, Long> {
     Date findByDate(LocalDate localDate);
-    @Query("SELECT d FROM Date d WHERE YEAR(d.date) = :year AND MONTH(d.date) = :month")
+    @Query("SELECT d FROM Date d WHERE YEAR(d.date) = :year AND MONTH(d.date) = :month ORDER BY d.date DESC")
     List<Date> findAllByYearAndMonth(int year, int month);
 }

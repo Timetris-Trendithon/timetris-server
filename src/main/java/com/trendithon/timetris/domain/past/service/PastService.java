@@ -8,4 +8,5 @@ import java.util.List;
 public interface PastService {
     List<PastViewDTO> readPastsAll(long userId);
     PastViewDTO readPast(long userId, String date);
+    List<PastViewDTO> readPathsMonthAll(long userId, String month);
 }
