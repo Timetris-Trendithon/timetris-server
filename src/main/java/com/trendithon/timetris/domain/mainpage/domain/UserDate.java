@@ -8,6 +8,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Entity
 @Getter
@@ -17,12 +20,23 @@ public class UserDate {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId")
     private User user;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "dateId")
     private Date date;
+
+    @OneToMany(mappedBy = "userDate", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Do> doList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "userDate", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Plan> planList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "userDate", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<See> seeList = new ArrayList<>();
 
     public UserDate(UserDateCreateDTO userDateCreateDTO){
         this.user = userDateCreateDTO.getUser();

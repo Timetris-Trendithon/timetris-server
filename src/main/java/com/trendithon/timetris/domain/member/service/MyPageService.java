@@ -4,8 +4,6 @@ import com.trendithon.timetris.domain.member.domain.User;
 import com.trendithon.timetris.domain.member.dto.MyPageResponse;
 import com.trendithon.timetris.domain.member.dto.UpdateNameRequest;
 import com.trendithon.timetris.domain.member.repository.UserRepository;
-import com.trendithon.timetris.global.exception.CustomException;
-import com.trendithon.timetris.global.exception.enums.ErrorStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,6 +37,11 @@ public class MyPageService {
                 .name(user.get().getNickname())
                 .email(user.get().getEmail())
                 .build();
+
+    }
+    @Transactional
+    public void deleteUser(Long userId) {
+        userRepository.deleteById(userId);
 
     }
 

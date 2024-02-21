@@ -41,4 +41,12 @@ public class MyPageController {
         return ApiResponse.success(SuccessStatus.OK, myPageDTO);
 
     }
+
+    @PostMapping
+    @Operation(summary = "회원 탈퇴 API")
+    public ApiResponse<?> userOutService(HttpServletRequest request) {
+        Long userId = tokenProvider.getUserId(request);
+        myPageService.deleteUser(userId);
+        return ApiResponse.success(SuccessStatus.DELETE_USER_SUCCESS);
+    }
 }
