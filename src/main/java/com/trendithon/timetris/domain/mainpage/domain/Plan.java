@@ -18,17 +18,24 @@ public class Plan {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
     private String title;
+
     private LocalTime startTime;
+
     private LocalTime endTime;
+
     private boolean status;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "categoryId")
     private Category category;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userDateId")
     private UserDate userDate;
-    @OneToMany(mappedBy = "plan", cascade = CascadeType.ALL)
+
+    @OneToMany(mappedBy = "plan", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Cycle> cycle;
 
     public Plan(PlanCreateDTO planCreateDTO, UserDate userDate){

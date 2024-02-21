@@ -1,8 +1,13 @@
 package com.trendithon.timetris.domain.member.domain;
 
+import com.trendithon.timetris.domain.mainpage.domain.Category;
+import com.trendithon.timetris.domain.mainpage.domain.UserDate;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -30,6 +35,12 @@ public class User {
     private Role role;
 
     private String refreshToken;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Category> categories = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UserDate> userDateList = new ArrayList<>();
 
     public void changeNickname(String nickname) {
         this.nickname = nickname;
