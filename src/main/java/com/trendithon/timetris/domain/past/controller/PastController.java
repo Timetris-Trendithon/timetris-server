@@ -26,12 +26,21 @@ public class PastController {
         return ApiResponse.success(SuccessStatus.OK, pastViewDTOList);
     }
 
-    @GetMapping("/{date}")
+    @GetMapping("/date/{date}")
     public ApiResponse<PastViewDTO> readPast(HttpServletRequest request,
                                              @PathVariable String date){
         long userId = tokenProvider.getUserId(request);
         PastViewDTO pastViewDTO = pastService.readPast(userId, date);
         return ApiResponse.success(SuccessStatus.OK, pastViewDTO);
     }
+
+    @GetMapping("/month/{month}")
+    public ApiResponse<List<PastViewDTO>> readPathsMonth(HttpServletRequest request,
+                                                         @PathVariable String month){
+        long userId = tokenProvider.getUserId(request);
+        List<PastViewDTO> pastViewDTOList = pastService.readPathsMonthAll(userId, month);
+        return ApiResponse.success(SuccessStatus.OK, pastViewDTOList);
+    }
+
 
 }

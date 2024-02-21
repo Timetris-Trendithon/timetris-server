@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.swing.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -62,6 +63,25 @@ public class PastServiceImpl implements PastService{
         List<Do> doList = doRepository.findAllByUserDate(userDate);
         List<See> see = seeRepository.findByUserDate(userDate);
         return PastViewDTO.from(date1, planList, doList, see);
+    }
+
+    @Override
+    public List<PastViewDTO> readPathsMonthAll(long userId, String month) {
+        String[] strings = month.split("-");
+        int year = Integer.parseInt(strings[0]);
+        int localMonth = Integer.parseInt(strings[1]);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorStatus.USER_NOT_FOUND_ERROR));
+        List<Date> dateList = dateRepository.findAllByYearAndMonth(year, localMonth);
+        List<PastViewDTO> result = new ArrayList<>();
+        dateList.forEach(date -> {
+            UserDate userDate = userDateRepository.findByUser_IdAndDate_Id(userId, date.getId());
+            List<Plan> planList = planRepository.findAllByUserDate(userDate);
+            List<Do> doList = doRepository.findAllByUserDate(userDate);
+            List<See> see = seeRepository.findByUserDate(userDate);
+            result.add(PastViewDTO.from(date, planList, doList, see));
+        });
+        return result;
     }
 
 
