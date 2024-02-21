@@ -7,9 +7,7 @@ import com.trendithon.timetris.global.exception.ApiResponse;
 import com.trendithon.timetris.global.exception.enums.SuccessStatus;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -22,10 +20,18 @@ public class PastController {
     private final TokenProvider tokenProvider;
 
     @GetMapping("")
-    public ApiResponse<List<PastViewDTO>> readPastsController(HttpServletRequest request){
+    public ApiResponse<List<PastViewDTO>> readPasts(HttpServletRequest request){
         long userId = tokenProvider.getUserId(request);
         List<PastViewDTO> pastViewDTOList = pastService.readPastsAll(userId);
         return ApiResponse.success(SuccessStatus.OK, pastViewDTOList);
+    }
+
+    @GetMapping("/{date}")
+    public ApiResponse<PastViewDTO> readPast(HttpServletRequest request,
+                                             @PathVariable String date){
+        long userId = tokenProvider.getUserId(request);
+        PastViewDTO pastViewDTO = pastService.readPast(userId, date);
+        return ApiResponse.success(SuccessStatus.OK, pastViewDTO);
     }
 
 }

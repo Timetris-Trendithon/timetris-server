@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -34,6 +35,9 @@ public class SeeServiceImpl implements SeeService{
         LocalDate localDate = LocalDate.now();
         Date date = dateRepository.findByDate(localDate);
         UserDate userDate = userDateRepository.findByUser_IdAndDate_Id(userId, date.getId());
+        if (!seeRepository.findByUserDate(userDate).isEmpty()){
+            throw new CustomException(ErrorStatus.SEE_ALREADY_EXISTS_ERROR);
+        }
         SeeCreateDTO seeCreateDTO = new SeeCreateDTO(seeRequestDTO.getContent());
         See see = new See(seeCreateDTO, userDate);
         return seeRepository.save(see);
