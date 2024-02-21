@@ -1,7 +1,6 @@
 package com.trendithon.timetris.domain.past.service;
 
 import com.trendithon.timetris.domain.mainpage.domain.*;
-import com.trendithon.timetris.domain.mainpage.dto.MainPageDTO;
 import com.trendithon.timetris.domain.mainpage.repository.*;
 import com.trendithon.timetris.domain.member.domain.User;
 import com.trendithon.timetris.domain.member.repository.UserRepository;
@@ -13,15 +12,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.time.Month;
-import java.time.Year;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class PathServiceImpl implements PastService{
+public class PastServiceImpl implements PastService{
 
     private final DateRepository dateRepository;
     private final UserRepository userRepository;
@@ -48,4 +46,23 @@ public class PathServiceImpl implements PastService{
                 });
         return result;
     }
+
+    @Override
+    public PastViewDTO readPast(long userId, String date) {
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy년MM월dd일"); // ex.2024년02월21일
+        LocalDate localDate = LocalDate.parse(date, dateTimeFormatter);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorStatus.USER_NOT_FOUND_ERROR));
+        Date date1 = dateRepository.findByDate(localDate);
+        if (date1 == null){
+            throw new CustomException(ErrorStatus.PDS_NOT_FOUND_ERROR);
+        }
+        UserDate userDate = userDateRepository.findByUser_IdAndDate_Id(userId, date1.getId());
+        List<Plan> planList = planRepository.findAllByUserDate(userDate);
+        List<Do> doList = doRepository.findAllByUserDate(userDate);
+        List<See> see = seeRepository.findByUserDate(userDate);
+        return PastViewDTO.from(date1, planList, doList, see);
+    }
+
+
 }

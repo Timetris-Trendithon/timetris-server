@@ -7,4 +7,5 @@ import java.util.List;
 @Service
 public interface PastService {
     List<PastViewDTO> readPastsAll(long userId);
+    PastViewDTO readPast(long userId, String date);
 }
