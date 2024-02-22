@@ -41,7 +41,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
                 accessToken = loginSuccess(response, oAuth2User);
             }
 
-            String redirectUrl = "http://localhost:3000?accessToken=" + accessToken;
+            String redirectUrl = "http://localhost:3000/pds?accessToken=" + accessToken;
 
             response.sendRedirect(redirectUrl);
 
