@@ -18,16 +18,16 @@ public class DoViewDTO {
 
     private long id;
     private String title;
-    private LocalTime startTime;
-    private LocalTime endTime;
+    private DoTimeDTO startTime;
+    private DoTimeDTO endTime;
     private CategoryViewDTO category;
 
     public static DoViewDTO of(Do does){
         return DoViewDTO.builder()
                 .id(does.getId())
                 .title(does.getTitle())
-                .startTime(does.getStartTime())
-                .endTime(does.getEndTime())
+                .startTime(DoTimeDTO.of(does.getStartTime()))
+                .endTime(DoTimeDTO.of(does.getEndTime()))
                 .category(CategoryViewDTO.of(does.getCategory()))
                 .build();
     }
