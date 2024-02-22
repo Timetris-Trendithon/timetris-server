@@ -34,8 +34,7 @@ public class PastServiceImpl implements PastService{
         LocalDate localDate = LocalDate.now();
         int year = localDate.getYear();
         int month = localDate.getMonth().getValue();
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new CustomException(ErrorStatus.USER_NOT_FOUND_ERROR));
+        findUser(userId);
         List<Date> dateList = dateRepository.findAllByYearAndMonth(year, month);
         List<PastViewDTO> result = new ArrayList<>();
         dateList.forEach(date -> {
@@ -52,8 +51,7 @@ public class PastServiceImpl implements PastService{
     public PastViewDTO readPast(long userId, String date) {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy년MM월dd일"); // ex.2024년02월21일
         LocalDate localDate = LocalDate.parse(date, dateTimeFormatter);
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new CustomException(ErrorStatus.USER_NOT_FOUND_ERROR));
+        findUser(userId);
         Date date1 = dateRepository.findByDate(localDate);
         if (date1 == null){
             throw new CustomException(ErrorStatus.PDS_NOT_FOUND_ERROR);
@@ -70,8 +68,7 @@ public class PastServiceImpl implements PastService{
         String[] strings = month.split("-");
         int year = Integer.parseInt(strings[0]);
         int localMonth = Integer.parseInt(strings[1]);
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new CustomException(ErrorStatus.USER_NOT_FOUND_ERROR));
+        findUser(userId);
         List<Date> dateList = dateRepository.findAllByYearAndMonth(year, localMonth);
         List<PastViewDTO> result = new ArrayList<>();
         dateList.forEach(date -> {
@@ -82,6 +79,11 @@ public class PastServiceImpl implements PastService{
             result.add(PastViewDTO.from(date, planList, doList, see));
         });
         return result;
+    }
+
+    public void findUser(long userId){
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorStatus.USER_NOT_FOUND_ERROR));
     }
 
 
