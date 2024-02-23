@@ -47,6 +47,7 @@ public class CategoryServiceImpl implements CategoryService{
     public void updateCategory(long userId, long categoryId, CategoryRequestDTO categoryRequestDTO) {
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new CustomException(ErrorStatus.CATEGORY_NOT_FOUND_ERROR));
+        findUser(userId);
         if (category.getUser().getId() != userId){
             throw new CustomException(ErrorStatus.NO_PERMISSION_ERROR);
         }
@@ -58,9 +59,15 @@ public class CategoryServiceImpl implements CategoryService{
     public void deleteCategory(long userId, long categoryId) {
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new CustomException(ErrorStatus.CATEGORY_NOT_FOUND_ERROR));
+        findUser(userId);
         if (category.getUser().getId() != userId){
             throw new CustomException(ErrorStatus.NO_PERMISSION_ERROR);
         }
         categoryRepository.delete(category);
+    }
+
+    public void findUser(long userId){
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorStatus.USER_NOT_FOUND_ERROR));
     }
 }

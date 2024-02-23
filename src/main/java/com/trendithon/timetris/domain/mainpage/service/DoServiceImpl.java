@@ -11,6 +11,8 @@ import com.trendithon.timetris.domain.mainpage.repository.CategoryRepository;
 import com.trendithon.timetris.domain.mainpage.repository.DateRepository;
 import com.trendithon.timetris.domain.mainpage.repository.DoRepository;
 import com.trendithon.timetris.domain.mainpage.repository.UserDateRepository;
+import com.trendithon.timetris.domain.member.domain.User;
+import com.trendithon.timetris.domain.member.repository.UserRepository;
 import com.trendithon.timetris.global.exception.CustomException;
 import com.trendithon.timetris.global.exception.enums.ErrorStatus;
 import lombok.RequiredArgsConstructor;
@@ -31,9 +33,11 @@ public class DoServiceImpl implements DoService{
     private final DateRepository dateRepository;
     private final UserDateRepository userDateRepository;
     private final CategoryRepository categoryRepository;
+    private final UserRepository userRepository;
 
     @Override
     public Do createDo(long userId, DoRequestDTO doRequestDTO) {
+        findUser(userId);
         LocalDate localDate = LocalDate.now();
         Date date = dateRepository.findByDate(localDate);
         UserDate userDate = userDateRepository.findByUser_IdAndDate_Id(userId, date.getId());
@@ -50,6 +54,7 @@ public class DoServiceImpl implements DoService{
 
     @Override
     public void updateDo(long userId, long doId, DoRequestDTO doRequestDTO) {
+        findUser(userId);
         Do done = doRepository.findById(doId)
                 .orElseThrow(() -> new CustomException(ErrorStatus.DO_NOT_FOUND_ERROR));
         if (done.getUserDate().getUser().getId() != userId){
@@ -67,11 +72,17 @@ public class DoServiceImpl implements DoService{
 
     @Override
     public void deleteDo(long userId, long doId) {
+        findUser(userId);
         Do done = doRepository.findById(doId)
                 .orElseThrow(() -> new CustomException(ErrorStatus.DO_NOT_FOUND_ERROR));
         if (done.getUserDate().getUser().getId() != userId){
             throw new CustomException(ErrorStatus.NO_PERMISSION_ERROR);
         }
         doRepository.delete(done);
+    }
+
+    public void findUser(long userId){
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorStatus.USER_NOT_FOUND_ERROR));
     }
 }
