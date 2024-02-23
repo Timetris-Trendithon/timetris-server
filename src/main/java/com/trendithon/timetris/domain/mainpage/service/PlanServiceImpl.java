@@ -3,6 +3,8 @@ package com.trendithon.timetris.domain.mainpage.service;
 import com.trendithon.timetris.domain.mainpage.domain.*;
 import com.trendithon.timetris.domain.mainpage.dto.*;
 import com.trendithon.timetris.domain.mainpage.repository.*;
+import com.trendithon.timetris.domain.member.domain.User;
+import com.trendithon.timetris.domain.member.repository.UserRepository;
 import com.trendithon.timetris.global.exception.CustomException;
 import com.trendithon.timetris.global.exception.enums.ErrorStatus;
 import lombok.RequiredArgsConstructor;
@@ -24,12 +26,13 @@ public class PlanServiceImpl implements PlanService {
     private final DateRepository dateRepository;
     private final UserDateRepository userDateRepository;
     private final CategoryRepository categoryRepository;
-    private final CycleRepository cycleRepository;
+    private final UserRepository userRepository;
 
     @Override
     public Plan createPlan(long userId, PlanRequestDTO planRequestDTO) {
         LocalDate localDate = LocalDate.now();
         Date date = dateRepository.findByDate(localDate);
+        findUser(userId);
         UserDate userDate = userDateRepository.findByUser_IdAndDate_Id(userId, date.getId());
         Category category = categoryRepository.findById(planRequestDTO.getCategoryId())
                 .orElseThrow(() -> new CustomException(ErrorStatus.CATEGORY_NOT_FOUND_ERROR));
@@ -45,6 +48,7 @@ public class PlanServiceImpl implements PlanService {
 
     @Override
     public void updatePlan(long userId, long planId, PlanRequestDTO planRequestDTO) {
+        findUser(userId);
         Plan plan = planRepository.findById(planId)
                 .orElseThrow(() -> new CustomException(ErrorStatus.PLAN_NOT_FOUND_ERROR));
         long categoryId = planRequestDTO.getCategoryId();
@@ -63,6 +67,7 @@ public class PlanServiceImpl implements PlanService {
 
     @Override
     public void deletePlan(long userId, long planId) {
+        findUser(userId);
         Plan plan = planRepository.findById(planId)
                 .orElseThrow(() -> new CustomException(ErrorStatus.PLAN_NOT_FOUND_ERROR));
         if (plan.getUserDate().getUser().getId() != userId) {
@@ -73,6 +78,7 @@ public class PlanServiceImpl implements PlanService {
 
     @Override
     public void donePlan(long userId, long planId) {
+        findUser(userId);
         Plan plan = planRepository.findById(planId)
                 .orElseThrow(() -> new CustomException(ErrorStatus.PLAN_NOT_FOUND_ERROR));
         if (plan.getUserDate().getUser().getId() != userId) {
@@ -80,5 +86,10 @@ public class PlanServiceImpl implements PlanService {
         }
         plan.donePlan();
         planRepository.save(plan);
+    }
+
+    public void findUser(long userId){
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorStatus.USER_NOT_FOUND_ERROR));
     }
 }
