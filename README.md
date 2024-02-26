@@ -1,5 +1,5 @@
 # 타임트리스
-나의 하루를 테트리스처럼 기록하고 관리할 수 있는 하루 일정 관리 서비스
+> 나의 하루를 테트리스처럼 기록하고 관리할 수 있는 하루 일정 관리 서비스
 <img width="988" alt="image" src="https://github.com/Timetris-Trendithon/timetris-server/assets/89904767/d3d0862d-a095-46ce-b260-d9d74a1065e6">
 
 
